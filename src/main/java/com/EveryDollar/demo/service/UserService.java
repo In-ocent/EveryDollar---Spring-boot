@@ -3,6 +3,7 @@ package com.EveryDollar.demo.service;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.EveryDollar.demo.dto.LoginDTO;
 import com.EveryDollar.demo.entity.UserEntity;
 import com.EveryDollar.demo.repository.UserRepository;
 
@@ -26,5 +27,25 @@ public class UserService {
         
         userRepository.save(user);
         return "User registered successfully!";
+    }
+
+
+    public String loginUser(LoginDTO loginDTO) {
+
+        UserEntity user = userRepository.findByUsername(loginDTO.getUsername());
+
+        if (user == null) {
+            return "Username not found!";
+        }
+
+        if (loginDTO.getPassword().equals(user.getPassword())) {
+            return "Login successful!";
+        } else {
+            return "Incorrect password!";
+        }
+    }
+
+    public UserEntity findByUsername(String username) {
+        return userRepository.findByUsername(username);
     }
 }

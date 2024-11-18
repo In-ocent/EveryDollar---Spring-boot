@@ -7,4 +7,6 @@ import com.EveryDollar.demo.entity.UserEntity;
 public interface UserRepository extends JpaRepository<UserEntity, Long> {
     boolean existsByEmailAddress(String emailAddress);
     boolean existsByUsername(String username);
+
+    UserEntity findByUsername(String username);
 }
