@@ -2,12 +2,14 @@ package com.EveryDollar.demo.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.EveryDollar.demo.dto.LoginDTO;
+import com.EveryDollar.demo.dto.UpdateProfileDTO;
 import com.EveryDollar.demo.entity.UserEntity;
 import com.EveryDollar.demo.service.UserService;
 
@@ -67,5 +69,36 @@ public class UserController {
             return ResponseEntity.badRequest().body("No active session.");
         }
     }
+
+
+    @PostMapping("/dashboard/edit-profile")
+    public ResponseEntity<String> editUserProfile(@RequestBody UpdateProfileDTO updateProfileDTO, HttpSession session) {
+        UserEntity loggedInUser = (UserEntity) session.getAttribute("loggedInUser");
+        
+        if (loggedInUser == null) {
+            return ResponseEntity.badRequest().body("No active session. Please log in again.");
+        }
+
+        String response = userService.updateUserProfile(updateProfileDTO, loggedInUser);
+
+        if (response.equals("Profile updated successfully!")) {
+            session.setAttribute("loggedInUser", loggedInUser); 
+            return ResponseEntity.ok(response);
+        } else {
+            return ResponseEntity.badRequest().body(response);
+        }
+    }
+
+    @GetMapping("/details")
+    public ResponseEntity<UserEntity> getUserDetails(HttpSession session) {
+        UserEntity loggedInUser = (UserEntity) session.getAttribute("loggedInUser");
+
+        if (loggedInUser != null) {
+            return ResponseEntity.ok(loggedInUser);
+        } else {
+            return ResponseEntity.badRequest().build();
+        }
+    }
+
 
 }

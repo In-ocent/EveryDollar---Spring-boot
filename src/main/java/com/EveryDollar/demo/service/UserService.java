@@ -4,6 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.EveryDollar.demo.dto.LoginDTO;
+import com.EveryDollar.demo.dto.UpdateProfileDTO;
 import com.EveryDollar.demo.entity.UserEntity;
 import com.EveryDollar.demo.repository.UserRepository;
 
@@ -47,5 +48,51 @@ public class UserService {
 
     public UserEntity findByUsername(String username) {
         return userRepository.findByUsername(username);
+    }
+
+
+    public String updateUserProfile(UpdateProfileDTO updateProfileDTO, UserEntity loggedInUser) {
+        // Check if username is being updated
+        if (updateProfileDTO.getUsername() != null &&
+            !updateProfileDTO.getUsername().equals(loggedInUser.getUsername()) &&
+            userRepository.existsByUsername(updateProfileDTO.getUsername())) {
+            return "Username is already in use!";
+        }
+    
+        // Check if email address is being updated
+        if (updateProfileDTO.getEmailAddress() != null &&
+            !updateProfileDTO.getEmailAddress().equals(loggedInUser.getEmailAddress()) &&
+            userRepository.existsByEmailAddress(updateProfileDTO.getEmailAddress())) {
+            return "Email address is already in use!";
+        }
+    
+        // Check if the current password is valid
+        if (updateProfileDTO.getCurrentPassword() != null &&
+        !updateProfileDTO.getCurrentPassword().isEmpty() &&
+        !loggedInUser.getPassword().equals(updateProfileDTO.getCurrentPassword())) {
+        return "Current password is incorrect!";
+}
+    
+        // Check if new password matches confirmation
+        if (updateProfileDTO.getNewPassword() != null && 
+            !updateProfileDTO.getNewPassword().equals(updateProfileDTO.getConfirmNewPassword())) {
+            return "New password and confirm password do not match!";
+        }
+    
+        // Update fields only if provided
+        if (updateProfileDTO.getUsername() != null && !updateProfileDTO.getUsername().isEmpty()) {
+            loggedInUser.setUsername(updateProfileDTO.getUsername());
+        }
+    
+        if (updateProfileDTO.getEmailAddress() != null && !updateProfileDTO.getEmailAddress().isEmpty()) {
+            loggedInUser.setEmailAddress(updateProfileDTO.getEmailAddress());
+        }
+    
+        if (updateProfileDTO.getNewPassword() != null && !updateProfileDTO.getNewPassword().isEmpty()) {
+            loggedInUser.setPassword(updateProfileDTO.getNewPassword());
+        }
+    
+        userRepository.save(loggedInUser);
+        return "Profile updated successfully!";
     }
 }
