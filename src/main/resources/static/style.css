@@ -1,0 +1,186 @@
+/* Global Reset */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+  }
+
+  body, ul, li, a {
+    margin: 0;
+    padding: 0;
+    text-decoration: none;
+    list-style: none;
+    box-sizing: border-box;
+  }
+  
+  body {
+    font-family: Arial, sans-serif;
+    line-height: 1.6;
+    background-color: #f8f9fa;
+  }
+  
+  /* Header */
+  header {
+    display: flex;
+    /* justify-content: space-between; */
+    align-items: center;
+    padding: 20px 50px;
+    background-color: #fff;
+    border: 1px solid #dbdada;
+    background-color: #f0f4f5;
+    border-radius: 10px solid black;
+  }
+  
+  header .logo img {
+    width: 180px;
+    height: 30px;
+    margin-left: 80px;
+
+  }
+  
+  main {
+    margin: 30px;
+    margin-left: 80px;
+    margin-right: 70px;
+    font-family: sans-serif;
+  }
+
+  nav {
+    display: flex;
+    align-items: center;
+    margin-left: 35px;
+    
+  }
+
+  nav ul {
+    display: flex;
+    gap: 20px;
+    list-style: none;
+    align-items: center;
+    margin-left: auto;
+  }
+
+  nav ul li {
+    width: auto;
+    align-items: center;
+    justify-content: center;
+  }
+  
+  nav a {
+    text-decoration: none;
+    color: #1f2426;
+    font-weight: bold;
+    transition: color 0.3s ease;
+    font-family: sans-serif;
+    font-size: 15.5px;
+    position: relative;
+    
+  }
+
+  nav ul a::after {
+    content: ""; /* Empty content for the pseudo-element */
+    position: absolute; /* Position it relative to the link */
+    left: 0; /* Start at the beginning of the link */
+    bottom: -5px; /* Position slightly below the text */
+    width: 0; /* Initially hidden (no width) */
+    height: 2px; /* Thickness of the line */
+    background-color: #0073b9; /* Line color */
+    transition: width 0.3s ease; /* Smooth width change on hover */
+  }
+
+  nav ul a:hover {
+    color: #0073b9; /* Change link color on hover */
+  }
+  
+  nav a:hover::after {
+    width: 100%; /* Full width underline on hover */
+  }
+  
+  .signup-btn {
+    display: flex;
+    background-color: #0073b9;
+    color: #fff;
+    padding: 8px 15px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-weight: bold;
+    font-family: sans-serif;
+    font-size: 1rem;
+    margin-left: 590px;
+    margin-right: 70px;
+    width: 6.5rem;
+    height: 2.5rem;
+    align-items: center;
+    justify-content: center;
+    
+  }
+  
+  .signup-btn:hover {
+    background-color: #054a93;
+  }
+  
+  /* Hero Section */
+  .hero {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 50px;
+  }
+  
+  .hero-content {
+    max-width: 50%;
+  }
+  
+  .hero-content h1 {
+    font-size: 60px;
+    font-family: sans-serif;
+    color: #003561;
+    margin-bottom: 20px;
+    margin-top: 2px;
+  }
+  
+  .hero-content p {
+    margin-top: 9px;
+    font-size: 1.2rem;
+    color: #1f2426;
+    font-family: sans-serif;
+    margin-bottom: 30px;
+  }
+  
+  .create-account-btn {
+    background-color: #0073b9;
+    color: #fff;
+    padding: 15px 30px;
+    border: none;
+    border-radius: 5px;
+    font-size: 1rem;
+    cursor: pointer;
+    font-weight: bold;
+    font-family: sans-serif;
+    font-size: 1rem;
+    
+  }
+  
+  .create-account-btn:hover {
+    background-color: #054a93;
+  }
+  
+  /* Hero Image */
+  .hero-image {
+    position: relative;
+    max-width: 70%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    height: 480px;
+    width: 610px;
+  }
+
+  .hero-image img {
+    height: 100%;
+    width: 100%;
+  }
+  
+
+  

@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css" integrity="sha512-Kc323vGBEqzTmouAECnVceyQqyqdsSiqLQISBL29aUW4U/M7pSPA/gEUZQqv1cwx4OnYxTxve5UMg5GT6L4JJg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <link rel="stylesheet" href="/Dasboard/style.css">
+    <title>Dashboard</title>
+</head>
+<body>
+  <div class="container">
+    <!-- Sidebar -->
+    <aside class="sidebar">
+      <div class="logo"><img src="/Dasboard/logo.png" alt=""></div>
+      <ul class="nav">
+          <li class="active">
+            <a href="/Dashboard/"><i class="fa-solid fa-chart-line"></i> Dashboard</a>
+          </li>
+          <li>
+            <a href="/Dasboard/Networth/index.html"><i class="fa-solid fa-coins"></i> Net Worth</a>
+          </li>
+          <li>
+            <a href="/Dasboard/Budget/index.html"><i class="fa-solid fa-wallet"></i> Budget</a>
+          </li>
+          <li>
+            <a href="/Dasboard/ActionPlan/index.html"><i class="fa-solid fa-bank"></i> Action Plan / Goals</a>
+          </li>
+          <li>
+            <a href="/Dasboard/FinancialReport/index.html"><i class="fa-solid fa-list-check"></i> Financial Reports</a>
+          </li>
+          <li>
+            <a href="/Dasboard/MyAccount/index.html"><i class="fa-solid fa-user-tie "></i> My Account</a>
+            
+          </li>
+      </ul>
+
+    </aside>
+    
+    <!-- Header -->
+    <header>
+      <div class="header-left">
+        <h1>Dashboard</h1>
+        <p th:text="${#strings.capitalize(currentDay.toLowerCase()) + ', ' + currentDate}"></p>
+      </div>
+      <div class="dropdown">
+        <div class="user-info">
+          <span th:text="${username}" class="user-name"></span>
+          <img 
+            src="/Dasboard/user.jpg" 
+            alt="User" 
+            class="rounded-image" 
+            id="userImage"
+          >
+        </div>
+        <!-- Dropdown Menu -->
+        <div class="dropdown-menu" id="dropdownMenu">
+          <button id="logoutButton">Logout</button>
+        </div>
+      </div>
+    </header>
+    <!-- Main Content -->
+    <main class="main">
+      
+
+      <!-- Charts Section -->
+      <div class="chart-container">
+        <h1>Financial Analysis</h1>
+        <div class="chart-buttons">
+          <button id="btnNetWorth" class="active">Net Worth</button>
+          <button id="btnAssets">Assets</button>
+          <button id="btnDebt">Debt</button>
+        </div>
+        <canvas id="lineChart"></canvas>
+      </div>
+      
+      
+
+      <!-- Data Cards -->
+      <section class="data-cards">
+        <div class="card">
+          <h3>Asset Value</h3>
+          <h1>$625,375</h1>
+          <canvas id="assetChart"></canvas>
+        </div>
+        <div class="card">
+          <h3>Debt Value</h3>
+          <h1>$375,375</h1>
+          <canvas id="debtChart"></canvas>
+        </div>
+        <div class="card third-card">
+          <div class="card small">
+            <h3>Income</h3>
+            <h1>$10,448</h1>
+          </div>
+          <div class="card small">
+            <h3>Spending</h3>
+            <h1>$2,875</h1>
+          </div>
+        </div>
+        
+      </section>
+
+      <!-- Action Plan Section -->
+      <section class="action-plan">
+        <div class="plan">
+          <h3>Action Plans</h3>
+          <div class="plan-item">
+            <span>Buy a car</span>
+            <progress value="25000" max="30000"></progress>
+          </div>
+          <div class="plan-item">
+            <span>Wedding</span>
+            <progress value="20000" max="30000"></progress>
+          </div>
+        </div>
+      </section>
+    </main>
+  </div>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <script src="/Dasboard/App.js"></script>
+</body>
+</html>
