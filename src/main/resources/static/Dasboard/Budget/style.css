@@ -574,3 +574,56 @@ box-shadow: 0px 10px 15px -5px rgba(0, 0, 0, 0.2);
     .item-list li button:active {
         background-color: #990000; /* Even darker red on click */
     }
+
+    .rounded-image {
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      cursor: pointer;
+    }
+    
+    /* Dropdown Styling */
+    .dropdown {
+      position: relative;
+      display: inline-block;
+    }
+    
+    .dropdown-menu {
+      display: none;
+      position: absolute;
+      top: 50px;
+      right: 0;
+      background-color: #fff;
+      border: 1px solid #e0e0e0;
+      border-radius: 5px;
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+      z-index: 1000;
+      width: 150px;
+      text-align: center;
+    }
+    
+    .dropdown-menu button {
+      padding: 10px;
+      width: 100%;
+      border: none;
+      background-color: transparent;
+      cursor: pointer;
+      font-size: 14px;
+    }
+    
+    .dropdown-menu button:hover {
+      background-color: #f0f0f0;
+    }
+    
+    .user-info {
+      display: flex;
+      align-items: center;
+      gap: 10px; /* Space between username and image */
+    }
+    
+    .user-name {
+      font-size: 16px; /* Adjust as needed */
+      font-weight: bold; /* Optional for emphasis */
+      text-transform: uppercase; /* Force uppercase */
+      color: white; /* Adjust color if needed */
+    }

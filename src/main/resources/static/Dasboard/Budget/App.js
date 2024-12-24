@@ -27,66 +27,95 @@ function addItem(type) {
     }
 }
 
-// let isSalaryAdded = false;
-
-//         function handleSalary() {
-//             const input = document.getElementById("monthly-salary");
-//             const result = document.getElementById("salary-result");
-//             const container = document.getElementById("salary-container");
-//             const button = document.getElementById("action-button");
-//             const salary = input.value.trim();
-
-//             if (!isSalaryAdded) {
-//                 // Add Salary
-//                 if (salary) {
-//                     result.innerHTML = `Your salary is &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<br><span style="font-size: 24px;">$${salary}</span>`;
-//                     input.style.display = "none"; // Hide input
-//                     button.textContent = "Update Salary"; // Change button text
-//                     container.removeChild(input.previousElementSibling); // Remove label
-//                     isSalaryAdded = true;
-//                 } else {
-//                     result.textContent = "Please enter a valid salary.";
-//                 }
-//             } else {
-//                 // Update Salary
-//                 result.textContent = "";
-//                 const label = document.createElement("label");
-//                 label.textContent = "Update Monthly Salary:";
-//                 label.htmlFor = "monthly-salary";
-
-//                 // Re-add input and label
-//                 input.style.display = "block";
-//                 input.placeholder = "Update your monthly salary";
-//                 container.insertBefore(label, input);
-//                 button.textContent = "Add Salary"; // Reset button text
-//                 isSalaryAdded = false;
-//             }
-//         }
-
 let incomeSources = [];
 let totalIncomes = 0;
 
+
 function addIncome() {
-    const incomeName = document.getElementById("income-name").value.trim();
-    const incomeAmount = parseFloat(document.getElementById("income-amount").value);
+    const incomeNameInput = document.getElementById("income-name");
+    const incomeAmountInput = document.getElementById("income-amount");
+
+    const incomeName = incomeNameInput.value.trim();
+    const incomeAmount = parseFloat(incomeAmountInput.value);
 
     if (incomeName === "" || isNaN(incomeAmount) || incomeAmount <= 0) {
         alert("Please provide valid income source name and amount.");
         return;
     }
 
-    // Add the new income source to the list
-    incomeSources.push({ name: incomeName, amount: incomeAmount });
+     // Create the request payload
+    const incomeData = {
+        sourceName: incomeName,
+        amount: incomeAmount
+    };
+    console.log({incomeData});
 
-    // Update the total income
-    totalIncomes += incomeAmount;
+    // Make the POST request to the backend API
+    fetch("http://localhost:8080/budget/add", {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json"
+        },
+        // credentials: 'include',
+        body: JSON.stringify(incomeData)
+    })
+        .then(response => {
+            if (!response.ok) {
+                throw new Error("Failed to add income. Please try again.");
+            }
+            return response.json();
+        })
+        .then(data => {
+            // Update the UI with the new income
+            const incomeItem = document.createElement("div");
+            incomeItem.className = "income-item";
+
+            incomeItem.innerHTML = `
+                <span>${data.sourceName}</span>
+                <span>$${data.amount.toFixed(2)}</span>
+                <button class="remove-btn" onclick="removeIncome(this, ${data.amount})">Remove</button>
+            `;
+
+            const incomeList = document.getElementById("income-list");
+            incomeList.appendChild(incomeItem);
+
+            // Update total income
+            totalIncome += data.amount;
+            const totalIncomeResult = document.getElementById("total-income-result");
+            totalIncomeResult.textContent = `Total Income: $${totalIncome.toFixed(2)}`;
+
+            // Update the Total Income header
+            document.getElementById("headerTotalAssets").textContent = `$${totalIncome.toFixed(2)}`;
+
+            // Clear the input fields and hide input fields
+            incomeNameInput.value = "";
+            incomeAmountInput.value = "";
+            const inputFieldsContainer = document.getElementById("input-fields-container");
+            const saveIncomeBtn = document.getElementById("save-income-btn");
+            const addItemBtn = document.getElementById("add-item-btn");
+
+            inputFieldsContainer.classList.add("hidden");
+            saveIncomeBtn.classList.add("hidden");
+            addItemBtn.classList.remove("hidden");
+        })
+        .catch(error => {
+            alert(error.message);
+            console.log({error});
+        });
+
+
+    // Add the new income source to the list
+    // incomeSources.push({ name: incomeName, amount: incomeAmount });
+
+    // // Update the total income
+    // totalIncomes += incomeAmount;
 
     // Update the UI
     updateIncomeUI();
 
     // Clear input fields
-    document.getElementById("income-name").value = "";
-    document.getElementById("income-amount").value = "";
+    // document.getElementById("income-name").value = "";
+    // document.getElementById("income-amount").value = "";
 }
 
 function updateIncomeUI() {
@@ -290,3 +319,29 @@ const incomeList = document.getElementById("income-list");
             const currentTotal = parseFloat(totalSpan.textContent);
             totalSpan.textContent = (currentTotal - itemAmount).toFixed(2);
         }
+
+
+// user image clicking and dropdown
+document.addEventListener("DOMContentLoaded", () => {
+    const userImage = document.getElementById("userImage");
+    const dropdownMenu = document.getElementById("dropdownMenu");
+  
+    // Toggle dropdown visibility on image click
+    userImage.addEventListener("click", (event) => {
+      event.stopPropagation(); // Prevent triggering outside click event
+      dropdownMenu.style.display =
+        dropdownMenu.style.display === "block" ? "none" : "block";
+    });
+  
+    // Close dropdown if clicked outside
+    document.addEventListener("click", () => {
+      dropdownMenu.style.display = "none";
+    });
+  
+    // Logout button functionality
+    const logoutButton = document.getElementById("logoutButton");
+    logoutButton.addEventListener("click", () => {
+      alert("Logged out!");
+      window.location.href = "/User_login/login.html"; // Adjust redirection path if needed
+    });
+  });

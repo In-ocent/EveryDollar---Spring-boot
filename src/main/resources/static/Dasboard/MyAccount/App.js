@@ -1,91 +1,111 @@
-const changePasswordForm = document.getElementById('changePasswordForm');
+// Event listeners for the forms
+document.addEventListener('DOMContentLoaded', () => {
+  const changePasswordForm = document.getElementById('changePasswordForm');
+  if (changePasswordForm) {
+      changePasswordForm.addEventListener('submit', handleChangePassword);
+  }
 
-changePasswordForm.addEventListener('submit', (event) => {
+  const changeEmailForm = document.getElementById('changeEmailForm');
+  if (changeEmailForm) {
+      changeEmailForm.addEventListener('submit', handleChangeEmail);
+  }
+
+  // Prefill user details (optional)
+  fetchUserDetails();
+});
+
+// Handle change password form submission
+async function handleChangePassword(event) {
   event.preventDefault(); // Prevent default form submission
 
+  // Get the input values
   const currentPassword = document.getElementById('currentPassword').value;
   const newPassword = document.getElementById('newPassword').value;
   const confirmPassword = document.getElementById('confirmPassword').value;
 
-  // 1. Check if current password matches the user's registered password
-  // **This step requires backend interaction to verify the current password.** 
-  // For this example, we'll simulate a successful check:
-  const isCurrentPasswordValid = true; // Replace with actual backend validation
-
-  // 2. Check if new password and confirm password match
+  // Validate that the new password and confirm password match
   if (newPassword !== confirmPassword) {
-    alert('New passwords do not match.');
-    return;
+      alert('New passwords do not match.');
+      return;
   }
 
-  if (isCurrentPasswordValid) {
-    // 3. If both checks pass, send the new password to the backend for updating
-    // **This step requires an AJAX call to your backend (Spring Boot)**
-    fetch('/api/change-password', { 
-      method: 'POST', 
-      headers: { 'Content-Type': 'application/json' }, 
-      body: JSON.stringify({ newPassword: newPassword }) 
-    })
-    .then(response => {
-      if (response.ok) { 
-        alert('Password changed successfully!'); 
-      } else { 
-        alert('Failed to change password. Please try again.'); 
-      } 
-    })
-    .catch(error => {
-      console.error('Error:', error); 
-      alert('An error occurred. Please try again later.'); 
-    });
+  // Send the request to the backend
+  try {
+      const response = await fetch('http://localhost:8080/user/dashboard/edit-profile', {
+          method: 'POST',
+          headers: {
+              'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+              currentPassword: currentPassword,
+              newPassword: newPassword,
+              confirmNewPassword: confirmPassword,
+          }),
+      });
 
-  } else {
-    alert('Incorrect current password.');
+      if (response.ok) {
+          alert('Password changed successfully!');
+          document.getElementById('changePasswordForm').reset(); // Clear the form
+      } else {
+          const errorData = await response.json();
+          alert(`Error changing password: ${errorData}`);
+      }
+  } catch (error) {
+      console.error('Error:', error);
+      alert('An error occurred. Please try again later.');
   }
-});
+}
 
+// Handle change email form submission
+async function handleChangeEmail(event) {
+  event.preventDefault(); // Prevent default form submission
 
-// Email change fucntionality
-
-
-const changeEmailForm = document.getElementById('changeEmailForm');
-
-// ... your existing password change form event listener ...
-
-changeEmailForm.addEventListener('submit', async (event) => {
-  event.preventDefault();
-
+  // Get the input values
   const currentEmail = document.getElementById('currentEmail').value;
   const newEmail = document.getElementById('newEmail').value;
 
+  // Send the request to the backend
   try {
-    const response = await fetch('/api/change-email', { 
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        // Include any necessary authentication headers (e.g., JWT)
-        'Authorization': `Bearer ${localStorage.getItem('token')}` 
-      },
-      body: JSON.stringify({
-        currentEmail: currentEmail,
-        newEmail: newEmail
-      })
-    });
+      const response = await fetch('http://localhost:8080/user/dashboard/edit-profile', {
+          method: 'POST',
+          headers: {
+              'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+              emailAddress: newEmail,
+          }),
+      });
 
-    if (response.ok) {
-      alert('Email changed successfully!'); 
-    } else {
-      const errorData = await response.json(); 
-      alert(`Error changing email: ${errorData.message}`); 
-    }
-
+      if (response.ok) {
+          alert('Email changed successfully!');
+          document.getElementById('changeEmailForm').reset(); // Clear the form
+      } else {
+          const errorData = await response.json();
+          alert(`Error changing email: ${errorData}`);
+      }
   } catch (error) {
-    console.error('Error:', error);
-    alert('An error occurred. Please try again later.');
+      console.error('Error:', error);
+      alert('An error occurred. Please try again later.');
   }
-});
+}
 
+// Fetch user details to prefill the current email field
+async function fetchUserDetails() {
+  try {
+      const response = await fetch('http://localhost:8080/user/details', {
+          method: 'GET',
+          headers: {
+              'Content-Type': 'application/json',
+          },
+      });
 
-
-
-
-
+      if (response.ok) {
+          const userData = await response.json();
+          document.getElementById('currentEmail').value = userData.emailAddress; // Prefill the current email
+      } else {
+          console.error('Failed to fetch user details.');
+      }
+  } catch (error) {
+      console.error('Error fetching user details:', error);
+  }
+}
