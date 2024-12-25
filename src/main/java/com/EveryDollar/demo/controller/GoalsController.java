@@ -36,8 +36,7 @@ public class GoalsController {
             
             return "ActionPlan/index"; // Ensure the correct template name
         } else {
-            System.out.println("redirecting...");
-            return "redirect:http://localhost:8080/User_login/login"; // Redirect to login page if session is invalid
+            return "redirect:/User_login/login.html"; // Redirect to login page if session is invalid
         }
     }
 }

@@ -64,3 +64,115 @@ function calculateNetWorth() {
   document.querySelectorAll('#assets input, #debts input').forEach(input => {
     input.addEventListener('input', calculateNetWorth);
   });
+
+
+  
+// Fetch assets and display them
+function fetchAssets() {
+  fetch("http://localhost:8080/networth/assets")
+      .then(response => response.json())
+      .then(data => {
+          const assetsList = document.getElementById("assets-list");
+          assetsList.innerHTML = ""; // Clear previous entries
+          let totalAssets = 0;
+
+          data.forEach(asset => {
+              totalAssets += asset.value;
+              const item = document.createElement("div");
+              item.classList.add("item");
+              item.innerHTML = `<span>${asset.name}: $${asset.value.toFixed(2)}</span>`;
+              assetsList.appendChild(item);
+          });
+
+          document.getElementById("headerTotalAssets").textContent = `$${totalAssets.toFixed(2)}`;
+          document.getElementById("totalAssets").textContent = `Total Assets: $${totalAssets.toFixed(2)}`;
+          calculateNetWorth();
+      })
+      .catch(error => console.error("Error fetching assets:", error));
+}
+
+// Fetch debts and display them
+function fetchDebts() {
+  fetch("http://localhost:8080/networth/debts")
+      .then(response => response.json())
+      .then(data => {
+          const debtsList = document.getElementById("debts-list");
+          debtsList.innerHTML = ""; // Clear previous entries
+          let totalDebts = 0;
+
+          data.forEach(debt => {
+              totalDebts += debt.value;
+              const item = document.createElement("div");
+              item.classList.add("item");
+              item.innerHTML = `<span>${debt.name}: $${debt.value.toFixed(2)}</span>`;
+              debtsList.appendChild(item);
+          });
+
+          document.getElementById("headerTotalDebts").textContent = `$${totalDebts.toFixed(2)}`;
+          document.getElementById("totalDebts").textContent = `Total Debts: $${totalDebts.toFixed(2)}`;
+          calculateNetWorth();
+      })
+      .catch(error => console.error("Error fetching debts:", error));
+}
+
+// Add an asset or debt
+function addEntry(type) {
+  const nameInput = type === "asset" ? "newAssetName" : "newDebtName";
+  const valueInput = type === "asset" ? "newAssetValue" : "newDebtValue";
+
+  const name = document.getElementById(nameInput).value.trim();
+  const value = parseFloat(document.getElementById(valueInput).value);
+
+  if (!name || isNaN(value) || value <= 0) {
+      alert(`Please enter a valid ${type} name and value.`);
+      return;
+  }
+
+  const payload = {
+      name: name,
+      value: value,
+      type: type
+  };
+
+  fetch("http://localhost:8080/networth/add", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(payload)
+  })
+      .then(response => {
+          if (!response.ok) {
+              throw new Error("Failed to add entry.");
+          }
+          return response.text();
+      })
+      .then(message => {
+          alert(message);
+          if (type === "asset") fetchAssets();
+          else fetchDebts();
+
+          // Clear input fields
+          document.getElementById(nameInput).value = "";
+          document.getElementById(valueInput).value = "";
+      })
+      .catch(error => alert(`Error: ${error.message}`));
+}
+
+// Calculate and display net worth
+function calculateNetWorth() {
+  const totalAssets = parseFloat(document.getElementById("headerTotalAssets").textContent.replace("$", "")) || 0;
+  const totalDebts = parseFloat(document.getElementById("headerTotalDebts").textContent.replace("$", "")) || 0;
+  const netWorth = totalAssets - totalDebts;
+
+  document.getElementById("headerNetWorth").textContent = `$${netWorth.toFixed(2)}`;
+  document.getElementById("netWorth").textContent = `Net Worth: $${netWorth.toFixed(2)}`;
+}
+
+// Initialize page
+function initializePage() {
+  fetchAssets();
+  fetchDebts();
+}
+
+// Load data on page load
+document.addEventListener("DOMContentLoaded", initializePage);
+
