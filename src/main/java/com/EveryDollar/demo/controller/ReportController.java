@@ -15,11 +15,10 @@ import com.EveryDollar.demo.entity.UserEntity;
 import jakarta.servlet.http.HttpSession;
 
 @Controller
-@RequestMapping("/Dashboard")
-public class DashboardController {
-
+@RequestMapping("/Report")
+public class ReportController {
     @GetMapping("/")
-    public String renderDashboard(HttpSession session, Model model) {
+    public String renderNetworth(HttpSession session, Model model) {
         // Get logged-in user details from session
         UserEntity loggedInUser = (UserEntity) session.getAttribute("loggedInUser");
 
@@ -35,9 +34,8 @@ public class DashboardController {
             model.addAttribute("currentDay", currentDay.name()); // E.g., "WEDNESDAY"
             model.addAttribute("currentDate", currentDate.format(formatter)); // E.g., "February 22, 2023"
             
-            return "Dasboard/index"; // Ensure the correct template name
+            return "FinancialReport/index"; // Ensure the correct template name
         } else {
-            System.out.println("redirecting...");
             return "redirect:http://localhost:8080/User_login/login"; // Redirect to login page if session is invalid
         }
     }

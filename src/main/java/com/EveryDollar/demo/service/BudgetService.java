@@ -23,6 +23,16 @@ public class BudgetService {
         budget.setUser(user);
         return budgetRepository.save(budget);
     }
+    
+    public boolean removeIncome(Long id, UserEntity user) {
+        BudgetEntity income = budgetRepository.findById(id).orElse(null);
+        if (income != null && income.getUser().getId().equals(user.getId())) {
+            budgetRepository.delete(income);
+            return true;
+        }
+        return false;
+    }
+    
 
     public BigDecimal getTotalIncome(UserEntity user) {
         return budgetRepository.findByUser(user).stream()

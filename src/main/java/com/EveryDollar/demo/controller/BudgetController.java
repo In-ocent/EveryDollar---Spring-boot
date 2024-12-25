@@ -40,10 +40,10 @@ public class BudgetController {
 
             return "Budget/index";
         } else {
-            return "redirect:/User_login/login";
+            return "redirect:/User_login/login.html";
         }
     }
-
+    
     @PostMapping("/add")
     @ResponseBody
     public BudgetEntity addIncome(@RequestBody BudgetDTO budgetDTO, HttpSession session) {
@@ -53,6 +53,24 @@ public class BudgetController {
         }
         return budgetService.addIncome(budgetDTO, loggedInUser);
     }
+
+    @DeleteMapping("/remove/{id}")
+    @ResponseBody
+    public String removeIncome(@PathVariable Long id, HttpSession session) {
+        UserEntity loggedInUser = (UserEntity) session.getAttribute("loggedInUser");
+        if (loggedInUser == null) {
+            throw new RuntimeException("User not logged in");
+        }
+
+        boolean isRemoved = budgetService.removeIncome(id, loggedInUser);
+        if (isRemoved) {
+            return "Income removed successfully!";
+        } else {
+            throw new RuntimeException("Failed to remove income. Income may not exist or does not belong to the logged-in user.");
+        }
+    }
+
+    
 
     @GetMapping("/total-income")
     @ResponseBody
