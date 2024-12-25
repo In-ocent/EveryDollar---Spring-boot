@@ -130,13 +130,20 @@ public class BudgetController {
 
     // Endpoint to get all optional spending
     @GetMapping("/optional-spending")
+    @ResponseBody
     public Expense[] getOptionalSpending() {
         return optionalSpending;
     }
 
     // Endpoint to add an optional spending item
     @PostMapping("/optional-spending")
+    @ResponseBody
     public String addOptionalSpending(@RequestBody Expense expense) {
+        return push(expense);
+    }
+
+    // Push function to simulate stack behavior
+    private String push(Expense expense) {
         if (optionalSpendingIndex < optionalSpending.length - 1) {
             optionalSpending[++optionalSpendingIndex] = expense;
             return "Optional spending item added successfully!";
@@ -146,7 +153,12 @@ public class BudgetController {
 
     // Endpoint to remove the last optional spending item (stack behavior)
     @DeleteMapping("/optional-spending")
+    @ResponseBody
     public String removeLastOptionalSpending() {
+        return pop();
+    }
+
+    private String pop() {
         if (optionalSpendingIndex >= 0) {
             optionalSpending[optionalSpendingIndex--] = null; // Remove the last item
             return "Last optional spending item removed successfully!";

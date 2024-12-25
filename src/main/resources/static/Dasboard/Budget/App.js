@@ -156,6 +156,7 @@ function initializePage() {
     fetchTotalIncome();
     fetchIncomeSources();
     fetchEssentialExpenses();
+    fetchOptionalSpending();
 }
 
 // Event listener for page load
@@ -256,10 +257,14 @@ function fetchOptionalSpending() {
         .then((response) => response.json())
         .then((data) => {
             const spendingList = document.getElementById("fun-list");
+            const totalElement = document.getElementById("fun-total");
             spendingList.innerHTML = ""; // Clear the list
+            let totalAmount = 0;
 
             data.forEach((spending, index) => {
                 if (spending) {
+                    totalAmount += spending.amount;
+
                     const spendingItem = document.createElement("li");
                     spendingItem.innerHTML = `
                         ${spending.name} - $${spending.amount.toFixed(2)}
@@ -267,6 +272,7 @@ function fetchOptionalSpending() {
                     spendingList.appendChild(spendingItem);
                 }
             });
+            totalElement.textContent = totalAmount.toFixed(2);
         })
         .catch((error) => console.error("Error fetching optional spending:", error));
 }
@@ -292,6 +298,9 @@ function addOptionalSpending() {
     })
         .then(() => {
             fetchOptionalSpending();
+            document.getElementById("fun-placeholder").style.display = 'none'; // Hide placeholder after adding
+            document.getElementById("fun-item").value = ""; // Clear the input field
+            document.getElementById("fun-amount").value = ""; // Clear the input field
         })
         .catch((error) => console.error("Error adding optional spending:", error));
 }
