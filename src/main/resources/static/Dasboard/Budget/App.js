@@ -155,6 +155,7 @@ function toggleInputFields() {
 function initializePage() {
     fetchTotalIncome();
     fetchIncomeSources();
+    fetchEssentialExpenses();
 }
 
 // Event listener for page load
@@ -170,3 +171,139 @@ document.addEventListener("DOMContentLoaded", () => {
         });
     }
 });
+
+function showPlaceholder(type) {
+    document.getElementById(`${type}-placeholder`).style.display = 'block';
+}
+
+// Fetch all essential expenses
+function fetchEssentialExpenses() {
+    fetch("http://localhost:8080/budget/essential-expenses", {
+        method: "GET",
+    })
+        .then((response) => response.json())
+        .then((data) => {
+            const expenseList = document.getElementById("bills-list");
+            const totalElement = document.getElementById("bills-total");
+            expenseList.innerHTML = ""; // Clear the list
+
+            let totalAmount = 0;
+
+            data.forEach((expense, index) => {
+                totalAmount += expense.amount; // Add each expense's amount to the total
+
+                const expenseItem = document.createElement("li");
+                expenseItem.innerHTML = `
+                    ${expense.name} - $${expense.amount.toFixed(2)}
+                    <button onclick="deleteEssentialExpense(${index})" class="remove-btn">Remove</button>
+                `;
+                expenseList.appendChild(expenseItem);
+            });
+
+            // Update the total in the HTML
+            totalElement.textContent = totalAmount.toFixed(2);
+        })
+        .catch((error) => console.error("Error fetching essential expenses:", error));
+}
+
+
+// Add an essential expense
+function addEssentialExpense() {
+    const itemName = document.getElementById("bills-item").value.trim();
+    const itemAmount = parseFloat(document.getElementById("bills-amount").value);
+
+    if (!itemName || isNaN(itemAmount) || itemAmount <= 0) {
+        alert("Please enter a valid item name and amount.");
+        return;
+    }
+
+    const expense = { name: itemName, amount: itemAmount };
+
+    fetch("http://localhost:8080/budget/essential-expenses", {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json",
+        },
+        body: JSON.stringify(expense),
+    })
+        .then(() => {
+            fetchEssentialExpenses();
+            document.getElementById("bills-placeholder").style.display = 'none'; // Hide placeholder after adding
+            document.getElementById("bills-item").value = ""; // Clear the input field
+            document.getElementById("bills-amount").value = ""; // Clear the input field
+        })
+
+        .catch((error) => console.error("Error adding essential expense:", error));
+}
+
+// Delete an essential expense
+function deleteEssentialExpense(index) {
+    fetch(`http://localhost:8080/budget/essential-expenses/${index}`, {
+        method: "DELETE",
+    })
+        .then(() => {
+            fetchEssentialExpenses();
+        })
+        .catch((error) => console.error("Error deleting essential expense:", error));
+}
+
+
+// Fetch all optional spending
+function fetchOptionalSpending() {
+    fetch("http://localhost:8080/budget/optional-spending", {
+        method: "GET",
+    })
+        .then((response) => response.json())
+        .then((data) => {
+            const spendingList = document.getElementById("fun-list");
+            spendingList.innerHTML = ""; // Clear the list
+
+            data.forEach((spending, index) => {
+                if (spending) {
+                    const spendingItem = document.createElement("li");
+                    spendingItem.innerHTML = `
+                        ${spending.name} - $${spending.amount.toFixed(2)}
+                    `;
+                    spendingList.appendChild(spendingItem);
+                }
+            });
+        })
+        .catch((error) => console.error("Error fetching optional spending:", error));
+}
+
+// Add an optional spending item
+function addOptionalSpending() {
+    const itemName = document.getElementById("fun-item").value.trim();
+    const itemAmount = parseFloat(document.getElementById("fun-amount").value);
+
+    if (!itemName || isNaN(itemAmount) || itemAmount <= 0) {
+        alert("Please enter a valid item name and amount.");
+        return;
+    }
+
+    const spendingItem = { name: itemName, amount: itemAmount };
+
+    fetch("http://localhost:8080/budget/optional-spending", {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json",
+        },
+        body: JSON.stringify(spendingItem),
+    })
+        .then(() => {
+            fetchOptionalSpending();
+        })
+        .catch((error) => console.error("Error adding optional spending:", error));
+}
+
+// Remove the last optional spending item (stack behavior)
+function removeLastOptionalSpending() {
+    fetch("http://localhost:8080/budget/optional-spending", {
+        method: "DELETE",
+    })
+        .then(() => {
+            fetchOptionalSpending();
+        })
+        .catch((error) => console.error("Error removing last optional spending item:", error));
+}
+

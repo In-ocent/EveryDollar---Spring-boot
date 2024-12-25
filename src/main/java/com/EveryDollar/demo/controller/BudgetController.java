@@ -14,6 +14,7 @@ import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.DayOfWeek;
 import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 
@@ -91,4 +92,103 @@ public class BudgetController {
         }
         return budgetService.getAllIncomeSources(loggedInUser);
     }
+
+
+    // Essential expense and optional spending data structures implementation
+
+    private List<Expense> essentialExpenses = new ArrayList<>();
+    
+    // Array to store optional spending
+    private Expense[] optionalSpending = new Expense[100]; // Example max size of 100
+    private int optionalSpendingIndex = -1; // Stack pointer for the array
+
+    // Endpoint to get all essential expenses
+    @GetMapping("/essential-expenses")
+    @ResponseBody
+    public List<Expense> getEssentialExpenses() {
+        return essentialExpenses;
+    }
+
+    // Endpoint to add an essential expense
+    @PostMapping("/essential-expenses")
+    @ResponseBody
+    public String addEssentialExpense(@RequestBody Expense expense) {
+        essentialExpenses.add(expense);
+        return "Essential expense added successfully!";
+    }
+
+    // Endpoint to delete an essential expense
+    @DeleteMapping("/essential-expenses/{index}")
+    @ResponseBody
+    public String deleteEssentialExpense(@PathVariable int index) {
+        if (index >= 0 && index < essentialExpenses.size()) {
+            essentialExpenses.remove(index);
+            return "Essential expense removed successfully!";
+        }
+        return "Invalid index!";
+    }
+
+    // Endpoint to get all optional spending
+    @GetMapping("/optional-spending")
+    public Expense[] getOptionalSpending() {
+        return optionalSpending;
+    }
+
+    // Endpoint to add an optional spending item
+    @PostMapping("/optional-spending")
+    public String addOptionalSpending(@RequestBody Expense expense) {
+        if (optionalSpendingIndex < optionalSpending.length - 1) {
+            optionalSpending[++optionalSpendingIndex] = expense;
+            return "Optional spending item added successfully!";
+        }
+        return "Optional spending array is full!";
+    }
+
+    // Endpoint to remove the last optional spending item (stack behavior)
+    @DeleteMapping("/optional-spending")
+    public String removeLastOptionalSpending() {
+        if (optionalSpendingIndex >= 0) {
+            optionalSpending[optionalSpendingIndex--] = null; // Remove the last item
+            return "Last optional spending item removed successfully!";
+        }
+        return "No items to remove!";
+    }
+
+    // Expense class (nested or as a separate file)
+    public static class Expense {
+        private String name;
+        private double amount;
+
+        // Constructors
+        public Expense() {
+        }
+
+        public Expense(String name, double amount) {
+            this.name = name;
+            this.amount = amount;
+        }
+
+        // Getters and setters
+        public String getName() {
+            return name;
+        }
+
+        public void setName(String name) {
+            this.name = name;
+        }
+
+        public double getAmount() {
+            return amount;
+        }
+
+        public void setAmount(double amount) {
+            this.amount = amount;
+        }
+
+        @Override
+        public String toString() {
+            return "Expense{name='" + name + "', amount=" + amount + "}";
+}
+    }
+    
 }
