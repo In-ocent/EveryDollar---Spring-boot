@@ -142,12 +142,6 @@ header .header-right {
   align-items: center;
 }
 
-/* header .header-right img {
-    border-radius: 50%;
-    margin-right: 10px;
-    border: 2px solid #fff;
-  } */
-
 header .header-right span {
   font-size: 16px;
   color: white;
@@ -189,6 +183,18 @@ td{
   
 }
 
+.main_heading {
+  color: black;
+  margin-bottom: 50px;
+  text-align: center;
+  font-size: 28px; /* Larger font size */
+  font-weight: bold; /* Make it bold */
+  text-transform: uppercase; /* Make the text uppercase */
+  letter-spacing: 1px; /* Add letter spacing for style */
+  margin-top: 0;
+}
+
+
 #downloadReport {
   background-color: #0073b9;
   color: white;
@@ -196,7 +202,10 @@ td{
   padding: 10px 20px;
   border-radius: 5px;
   cursor: pointer;
-  margin-top: 20px;
+  margin-top: 50px;
+  display: block;
+  margin-left: auto; /* Center horizontally */
+  margin-right: auto; /* Center horizontally */
 }
 
 .main_heading{
@@ -219,4 +228,57 @@ td{
 .goals{
   border-top-right-radius: 5px;
   border-bottom-right-radius: 5px;
+}
+
+.rounded-image {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  cursor: pointer;
+}
+
+/* Dropdown Styling */
+.dropdown {
+  position: relative;
+  display: inline-block;
+}
+
+.dropdown-menu {
+  display: none;
+  position: absolute;
+  top: 50px;
+  right: 0;
+  background-color: #fff;
+  border: 1px solid #e0e0e0;
+  border-radius: 5px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  z-index: 1000;
+  width: 150px;
+  text-align: center;
+}
+
+.dropdown-menu button {
+  padding: 10px;
+  width: 100%;
+  border: none;
+  background-color: transparent;
+  cursor: pointer;
+  font-size: 14px;
+}
+
+.dropdown-menu button:hover {
+  background-color: #f0f0f0;
+}
+
+.user-info {
+  display: flex;
+  align-items: center;
+  gap: 10px; /* Space between username and image */
+}
+
+.user-name {
+  font-size: 16px; /* Adjust as needed */
+  font-weight: bold; /* Optional for emphasis */
+  text-transform: uppercase; /* Force uppercase */
+  color: white; /* Adjust color if needed */
 }

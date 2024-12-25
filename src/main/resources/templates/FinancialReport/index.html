@@ -4,11 +4,11 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <link rel="stylesheet" href="/Dasboard/Networth/style.css">
+  <link rel="stylesheet" href="/Dasboard/FinancialReport/style.css">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css"
     integrity="sha512-Kc323vGBEqzTmouAECnVceyQqyqdsSiqLQISBL29aUW4U/M7pSPA/gEUZQqv1cwx4OnYxTxve5UMg5GT6L4JJg=="
     crossorigin="anonymous" referrerpolicy="no-referrer" />
-  <title>Document</title>
+  <title>Financial Report</title>
 </head>
 
 <body>
@@ -36,22 +36,17 @@
           <a href="/My-account/"><i class="fa-solid fa-user-tie "></i> My Account</a>
         </li>
       </ul>
-      <!-- <div class="advisor">
-        <p>Speak with advisor</p>
-        <button>Get started</button>
-      </div>  -->
     </aside>
-    <div id="sidebar-container"></div> <!-- Placeholder for the sidebar -->
 
     <!-- Header -->
     <header>
       <div class="header-left">
         <h1>Dashboard</h1>
-        <p th:text="${#strings.capitalize(currentDay.toLowerCase()) + ', ' + currentDate}"></p>
+        <p id="currentDate"></p>
       </div>
       <div class="dropdown">
         <div class="user-info">
-          <span th:text="${username}" class="user-name"></span>
+          <span id="username"></span>
           <img 
             src="/Dasboard/user.jpg" 
             alt="User" 
@@ -69,48 +64,40 @@
     <!-- Main Content -->
     <main class="main">
       <div class="report">
-      <h1 class="main_heading">Financial Report</h1>
+        <h1 class="main_heading">Financial Report</h1>
 
-      <table>
-        <thead>
-          <tr>
-            <th class="month">Month</th>
-            <th>Monthly Income</th>
-            <th>Essential Expenses</th>
-            <th>Optional Expenses</th>
-            <th>Total Cost</th>
-            <th class="goals">Goals Status</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr>
-            <td>
-              <span id="month"></span>
-            </td>
-            <td>
-              <span id="monthlyIncome"></span>
-            </td>
-            <td>
-              <span id="essentialExpenses"></span>
-            </td>
-            <td>
-              <span id="optionalExpenses"></span>
-            </td>
-            <td>
-              <span id="totalCost"></span>
-            </td>
-            <td>
-              <span id="goalsStatus"></span>
-            </td>
-          </tr>
-        </tbody>
-      </table>
+        <table>
+          <thead>
+            <tr>
+              <th class="month">Month</th>
+              <th>Monthly Income</th>
+              <th>Essential Expenses</th>
+              <th>Optional Expenses</th>
+              <th>Total Expenses</th>
+              <th>Net Worth</th>
+              <th>Goals Status</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><span id="month"></span></td>
+              <td><span id="monthlyIncome"></span></td>
+              <td><span id="essentialExpenses"></span></td>
+              <td><span id="optionalExpenses"></span></td>
+              <td><span id="totalExpenses"></span></td>
+              <td><span id="netWorth"></span></td>
+              <td><span id="goalsStatus"></span></td>
+            </tr>
+          </tbody>
+        </table>
 
+        
+      </div>
       <button id="downloadReport">Download Report (PDF)</button>
-    </div>
     </main>
   </div>
-  <script src="/Dasboard/Networth/App.js"></script>
+  <script src="/Dasboard/FinancialReport/App.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.9.2/html2pdf.bundle.min.js"></script>
 </body>
 
 </html>
