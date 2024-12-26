@@ -3,6 +3,8 @@ package com.EveryDollar.demo.controller;
 import java.time.DayOfWeek;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 
@@ -71,5 +73,20 @@ public class FinancialReportController {
         }
 
         return reportService.generateMonthlyReport(loggedInUser, month);
+    }
+
+    @GetMapping("/all")
+    @ResponseBody
+    public List<Map<String, Object>> getAllReports(HttpSession session) {
+        UserEntity loggedInUser = (UserEntity) session.getAttribute("loggedInUser");
+        if (loggedInUser == null) {
+            throw new RuntimeException("User not logged in");
+        }
+
+        List<Map<String, Object>> allReports = new ArrayList<>();
+        for (int month = 1; month <= 12; month++) {
+            allReports.add(reportService.generateMonthlyReport(loggedInUser, month));
+        }
+        return allReports;
     }
 }

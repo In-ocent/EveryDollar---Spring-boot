@@ -58,9 +58,16 @@ public class ReportService {
         reportData.put("totalGoals", totalGoals != null ? totalGoals : 0);
 
         // Calculate net worth
-        BigDecimal netWorth = (totalAssets != null ? totalAssets : BigDecimal.ZERO)
-                                .subtract(totalDebts != null ? totalDebts : BigDecimal.ZERO);
+        BigDecimal monthlyAssets = reportRepository.getMonthlyAssets(user, month);
+        BigDecimal monthlyDebts = reportRepository.getMonthlyDebts(user, month);
+
+        // Calculate net worth
+        BigDecimal netWorth = (monthlyAssets != null ? monthlyAssets : BigDecimal.ZERO)
+                                .subtract(monthlyDebts != null ? monthlyDebts : BigDecimal.ZERO);
         reportData.put("netWorth", netWorth);
+        // BigDecimal netWorth = (totalAssets != null ? totalAssets : BigDecimal.ZERO)
+        //                         .subtract(totalDebts != null ? totalDebts : BigDecimal.ZERO);
+        // reportData.put("netWorth", netWorth);
 
         // Add month information
         reportData.put("month", LocalDate.now().withMonth(month).getMonth().toString());

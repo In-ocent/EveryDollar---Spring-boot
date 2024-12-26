@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
+import java.time.LocalDate;
 import java.util.List;
 
 @Service
@@ -42,5 +43,18 @@ public class BudgetService {
 
     public List<BudgetEntity> getAllIncomeSources(UserEntity user) {
         return budgetRepository.findByUser(user);
+    }
+
+    public List<BudgetEntity> getCurrentMonthIncomeSources(UserEntity user) {
+        int currentMonth = LocalDate.now().getMonthValue();
+        int currentYear = LocalDate.now().getYear();
+        return budgetRepository.findCurrentMonthIncomeSources(user, currentMonth, currentYear);
+    }
+
+    public BigDecimal getCurrentMonthTotalIncome(UserEntity user) {
+        int currentMonth = LocalDate.now().getMonthValue();
+        int currentYear = LocalDate.now().getYear();
+        BigDecimal totalIncome = budgetRepository.getTotalIncomeForCurrentMonth(user, currentMonth, currentYear);
+        return totalIncome != null ? totalIncome : BigDecimal.ZERO;
     }
 }

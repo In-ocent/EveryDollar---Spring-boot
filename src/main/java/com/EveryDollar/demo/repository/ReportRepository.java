@@ -18,6 +18,12 @@ public interface ReportRepository extends JpaRepository<BudgetEntity, Long> {
     @Query("SELECT SUM(b.amount) FROM BudgetEntity b WHERE b.user = :user AND MONTH(b.createdAt) = :month")
     Double getMonthlyIncome(@Param("user") UserEntity user, @Param("month") int month);
 
+    @Query("SELECT SUM(n.value) FROM NetworthEntity n WHERE n.user = :user AND n.type = 'asset' AND MONTH(n.createdAt) = :month")
+    BigDecimal getMonthlyAssets(@Param("user") UserEntity user, @Param("month") int month);
+
+    @Query("SELECT SUM(n.value) FROM NetworthEntity n WHERE n.user = :user AND n.type = 'debt' AND MONTH(n.createdAt) = :month")
+    BigDecimal getMonthlyDebts(@Param("user") UserEntity user, @Param("month") int month);
+
     // Fetch Monthly Essential Expenses
     @Query("SELECT SUM(b.amount) FROM BudgetEntity b WHERE b.user = :user AND MONTH(b.createdAt) = :month AND b.sourceName = 'essential'")
     Double getEssentialExpenses(@Param("user") UserEntity user, @Param("month") int month);

@@ -93,6 +93,25 @@ public class BudgetController {
         return budgetService.getAllIncomeSources(loggedInUser);
     }
 
+    @GetMapping("/current-month-income-sources")
+    @ResponseBody
+    public List<BudgetEntity> getCurrentMonthIncomeSources(HttpSession session) {
+        UserEntity loggedInUser = (UserEntity) session.getAttribute("loggedInUser");
+        if (loggedInUser == null) {
+            throw new RuntimeException("User not logged in");
+        }
+        return budgetService.getCurrentMonthIncomeSources(loggedInUser);
+    }
+
+    @GetMapping("/current-month-total-income")
+    @ResponseBody
+    public BigDecimal getCurrentMonthTotalIncome(HttpSession session) {
+        UserEntity loggedInUser = (UserEntity) session.getAttribute("loggedInUser");
+        if (loggedInUser == null) {
+            throw new RuntimeException("User not logged in");
+        }
+        return budgetService.getCurrentMonthTotalIncome(loggedInUser);
+    }
 
     // Essential expense and optional spending data structures implementation
 

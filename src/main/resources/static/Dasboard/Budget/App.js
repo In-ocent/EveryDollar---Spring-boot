@@ -3,7 +3,7 @@ let incomeSources = []; // Stores all income sources
 
 // Function to fetch total income from the backend
 function fetchTotalIncome() {
-    fetch("http://localhost:8080/budget/total-income", {
+    fetch("http://localhost:8080/budget/current-month-total-income", {
         method: "GET",
         headers: {
             "Content-Type": "application/json",
@@ -28,8 +28,42 @@ function fetchTotalIncome() {
 
 // Function to fetch all income sources from the backend
 
+// function fetchIncomeSources() {
+//     fetch("http://localhost:8080/budget/income-sources", {
+//         method: "GET",
+//         headers: {
+//             "Content-Type": "application/json",
+//         },
+//     })
+//         .then((response) => {
+//             if (!response.ok) {
+//                 throw new Error("Failed to fetch income sources.");
+//             }
+//             return response.json();
+//         })
+//         .then((data) => {
+//             incomeSources = data;
+//             const incomeList = document.getElementById("income-list");
+//             incomeList.innerHTML = ""; // Clear the list
+
+//             incomeSources.forEach((source) => {
+//                 const incomeItem = document.createElement("div");
+//                 incomeItem.className = "income-item";
+//                 incomeItem.innerHTML = `
+//                     <span>${source.sourceName}</span>
+//                     <span>$${source.amount.toFixed(2)}</span>
+//                     <button class="remove-btn" onclick="removeIncome(${source.id}, this)">Remove</button>
+//                 `;
+//                 incomeList.appendChild(incomeItem);
+//             });
+//         })
+//         .catch((error) => {
+//             console.error("Error fetching income sources:", error);
+//         });
+// }
+
 function fetchIncomeSources() {
-    fetch("http://localhost:8080/budget/income-sources", {
+    fetch("http://localhost:8080/budget/current-month-income-sources", {
         method: "GET",
         headers: {
             "Content-Type": "application/json",
@@ -42,11 +76,10 @@ function fetchIncomeSources() {
             return response.json();
         })
         .then((data) => {
-            incomeSources = data;
             const incomeList = document.getElementById("income-list");
             incomeList.innerHTML = ""; // Clear the list
 
-            incomeSources.forEach((source) => {
+            data.forEach((source) => {
                 const incomeItem = document.createElement("div");
                 incomeItem.className = "income-item";
                 incomeItem.innerHTML = `
@@ -61,6 +94,7 @@ function fetchIncomeSources() {
             console.error("Error fetching income sources:", error);
         });
 }
+
 
 
 // Function to add income

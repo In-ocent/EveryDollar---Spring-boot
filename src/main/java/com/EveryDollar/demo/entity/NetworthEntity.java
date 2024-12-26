@@ -1,6 +1,7 @@
 package com.EveryDollar.demo.entity;
 
 import java.math.BigDecimal;
+import java.time.LocalDateTime;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -30,6 +31,9 @@ public class NetworthEntity {
     @ManyToOne
     @JoinColumn(name = "user_id", nullable = false)
     private UserEntity user;
+
+    @Column(name = "created_at")
+    private LocalDateTime createdAt;
 
     // Getters and setters
     public Long getId() { return id; }
