@@ -7,42 +7,38 @@ document.querySelector('#forms').addEventListener('submit', (event) => {
     const password = document.getElementById('password').value;
     const confirmPassword = document.getElementById('confirmPassword').value;
 
-    // Password verification   
 
-    const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{6,}$/;
-    if (!passwordRegex.test(password)) {
-        alert('Password must contain at least one uppercase letter, one lowercase letter, one number, and one special character, and be at   least 6 characters long.');
-            return;
-    }
-
-
-    // Validate form data (you can add more validation as needed)
+    // Check if passwords match
     if (password !== confirmPassword) {
         alert('Passwords do not match');
         return;
     }
 
-    // Send form data to server (replace with your backend logic)
-    fetch('/register', {
+    // Send form data to the server
+    fetch('http://localhost:8080/user/register', {
         method: 'POST',
-        body: JSON.stringify({ email, username, password }),
+        body: JSON.stringify({
+            emailAddress: email, // Ensure the key matches your UserEntity field
+            username: username,
+            password: password,
+        }),
         headers: {
-            'Content-Type': 'application/json'
-        }
+            'Content-Type': 'application/json',
+        },
     })
-        .then(response => {
+        .then((response) => {
             if (response.ok) {
-                // Handle successful registration
-                alert('Registration successful!');
-                // Redirect to login page or other desired page
-                window.location.href = '../User_login/login.html';
+                return response.text(); // Parse the response as text
             } else {
-                // Handle registration errors
-                alert('Registration failed. Please try again.');
+                throw new Error('Registration failed');
             }
         })
-        .catch(error => {
+        .then((message) => {
+            alert(message); // Display success message
+            window.location.href = '../User_login/login.html'; // Redirect to login page
+        })
+        .catch((error) => {
             console.error('Error:', error);
-            alert('An error occurred. Please try again later.');
+            alert('An error occurred during registration. Please try again later.');
         });
 });
