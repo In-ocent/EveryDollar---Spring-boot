@@ -69,7 +69,7 @@ function calculateNetWorth() {
   
 // Fetch assets and display them
 function fetchAssets() {
-  fetch("http://localhost:8080/networth/assets")
+  fetch("http://localhost:8080/networth/current-month-assets")
       .then(response => response.json())
       .then(data => {
           const assetsList = document.getElementById("assets-list");
@@ -93,7 +93,7 @@ function fetchAssets() {
 
 // Fetch debts and display them
 function fetchDebts() {
-  fetch("http://localhost:8080/networth/debts")
+  fetch("http://localhost:8080/networth/current-month-debts")
       .then(response => response.json())
       .then(data => {
           const debtsList = document.getElementById("debts-list");

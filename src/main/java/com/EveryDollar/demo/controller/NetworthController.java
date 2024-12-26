@@ -83,24 +83,23 @@ public class NetworthController {
     }
 
     // Get all assets
-    @GetMapping("/assets")
+    @GetMapping("/current-month-assets")
     @ResponseBody
-    public List<NetworthEntity> getAssets(HttpSession session) {
+    public List<NetworthEntity> getCurrentMonthAssets(HttpSession session) {
         UserEntity loggedInUser = (UserEntity) session.getAttribute("loggedInUser");
         if (loggedInUser == null) {
             throw new RuntimeException("User not logged in");
         }
-        return netWorthService.getAssets(loggedInUser);
+        return netWorthService.getCurrentMonthAssets(loggedInUser);
     }
 
-    // Get all debts
-    @GetMapping("/debts")
+    @GetMapping("/current-month-debts")
     @ResponseBody
-    public List<NetworthEntity> getDebts(HttpSession session) {
+    public List<NetworthEntity> getCurrentMonthDebts(HttpSession session) {
         UserEntity loggedInUser = (UserEntity) session.getAttribute("loggedInUser");
         if (loggedInUser == null) {
             throw new RuntimeException("User not logged in");
         }
-        return netWorthService.getDebts(loggedInUser);
+        return netWorthService.getCurrentMonthDebts(loggedInUser);
     }
 }
