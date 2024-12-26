@@ -47,14 +47,14 @@ public class DashboardController {
             Map<String, Object> dashboardData = dashboardService.getDashboardData(loggedInUser);
             ObjectMapper objectMapper = new ObjectMapper();
             try {
-                String assetDetailsJson = objectMapper.writeValueAsString(dashboardData.get("assetDetails"));
-                String debtDetailsJson = objectMapper.writeValueAsString(dashboardData.get("debtDetails"));
-
-                model.addAttribute("assetDetailsJson", assetDetailsJson);
-                model.addAttribute("debtDetailsJson", debtDetailsJson);
+                String currentMonthAssetDetailsJson = objectMapper.writeValueAsString(dashboardData.get("currentMonthAssetDetails"));
+                String currentMonthDebtDetailsJson = objectMapper.writeValueAsString(dashboardData.get("currentMonthDebtDetails"));
+                
+                model.addAttribute("currentMonthAssetDetailsJson", currentMonthAssetDetailsJson);
+                model.addAttribute("currentMonthDebtDetailsJson", currentMonthDebtDetailsJson);
             } catch (Exception e) {
-                model.addAttribute("assetDetailsJson", "[]");
-                model.addAttribute("debtDetailsJson", "[]");
+                model.addAttribute("currentMonthAssetDetailsJson", "[]");
+                model.addAttribute("currentMonthDebtDetailsJson", "[]");
             }
             model.addAttribute("dashboardData", dashboardData);
 

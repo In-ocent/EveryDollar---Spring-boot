@@ -79,14 +79,15 @@
       <section class="data-cards">
         <div class="card">
           <h3>Asset Value</h3>
-          <h1 th:text="'$ ' + ${dashboardData.totalAssets}">$625,375</h1>
+          <h1 th:text="'$ ' + ${dashboardData.totalCurrentMonthAssets}">$625,375</h1>
           <canvas id="assetChart"></canvas>
         </div>
         <div class="card">
           <h3>Debt Value</h3>
-          <h1 th:text="'$ ' + ${dashboardData.totalDebts}">$375,375</h1>
+          <h1 th:text="'$ ' + ${dashboardData.totalCurrentMonthDebts}">$375,375</h1>
           <canvas id="debtChart"></canvas>
         </div>
+
         <div class="card third-card">
           <div class="card small">
             <h3>Income</h3>
@@ -113,10 +114,15 @@
     </main>
   </div>
 
-  <script th:inline="javascript">
+  <!-- <script th:inline="javascript">
     // Safely pass asset and debt data to JavaScript
     const assetData = JSON.parse(/*[[${assetDetailsJson}]]*/ '[]');
     const debtData = JSON.parse(/*[[${debtDetailsJson}]]*/ '[]');
+  </script> -->
+
+  <script th:inline="javascript">
+    const currentMonthAssetDetails = JSON.parse(/*[[${currentMonthAssetDetailsJson}]]*/ "[]");
+    const currentMonthDebtDetails = JSON.parse(/*[[${currentMonthDebtDetailsJson}]]*/ "[]");
   </script>
 
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>

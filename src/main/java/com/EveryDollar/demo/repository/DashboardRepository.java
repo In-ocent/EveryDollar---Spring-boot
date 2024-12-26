@@ -1,5 +1,26 @@
 package com.EveryDollar.demo.repository;
 
-public class DashboardRepository {
-    
+import java.math.BigDecimal;
+import java.util.List;
+
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
+
+import com.EveryDollar.demo.entity.NetworthEntity;
+import com.EveryDollar.demo.entity.UserEntity;
+
+public interface DashboardRepository extends JpaRepository<NetworthEntity, Long> {
+
+    @Query("SELECT n.name, n.value FROM NetworthEntity n WHERE n.user = :user AND n.type = 'asset' AND MONTH(n.createdAt) = :month AND YEAR(n.createdAt) = :year")
+    List<Object[]> getCurrentMonthAssets(@Param("user") UserEntity user, @Param("month") int month, @Param("year") int year);
+
+    @Query("SELECT n.name, n.value FROM NetworthEntity n WHERE n.user = :user AND n.type = 'debt' AND MONTH(n.createdAt) = :month AND YEAR(n.createdAt) = :year")
+    List<Object[]> getCurrentMonthDebts(@Param("user") UserEntity user, @Param("month") int month, @Param("year") int year);
+
+    @Query("SELECT SUM(n.value) FROM NetworthEntity n WHERE n.user = :user AND n.type = 'asset' AND MONTH(n.createdAt) = :month AND YEAR(n.createdAt) = :year")
+    BigDecimal getTotalCurrentMonthAssets(@Param("user") UserEntity user, @Param("month") int month, @Param("year") int year);
+
+    @Query("SELECT SUM(n.value) FROM NetworthEntity n WHERE n.user = :user AND n.type = 'debt' AND MONTH(n.createdAt) = :month AND YEAR(n.createdAt) = :year")
+    BigDecimal getTotalCurrentMonthDebts(@Param("user") UserEntity user, @Param("month") int month, @Param("year") int year);
 }

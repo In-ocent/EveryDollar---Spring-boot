@@ -131,14 +131,14 @@ setActiveButton('btnNetWorth');
 
 // Render Doughnut Chart for Assets
 const assetCtx = document.getElementById("assetChart").getContext("2d");
-if (assetData && assetData.length > 0) {
+if (currentMonthAssetDetails && currentMonthAssetDetails.length > 0) {
   new Chart(assetCtx, {
     type: "doughnut",
     data: {
-      labels: assetData.map(item => item.name || "Unknown"), // Labels for the chart (asset names)
+      labels: currentMonthAssetDetails.map(item => item.name || "Unknown"), // Labels for the chart (asset names)
       datasets: [
         {
-          data: assetData.map(item => item.value || 0), // Data for the chart (asset values)
+          data: currentMonthAssetDetails.map(item => item.value || 0), // Data for the chart (asset values)
           backgroundColor: ["#3ABEF9", "#A7E6FF", "#3572EF"], // Colors for the doughnut slices
           borderWidth: 1, // Border width for each slice
         },
@@ -161,14 +161,14 @@ if (assetData && assetData.length > 0) {
 
 // Render Doughnut Chart for Debts
 const debtCtx = document.getElementById("debtChart").getContext("2d");
-if (debtData && debtData.length > 0) {
+if (currentMonthDebtDetails && currentMonthDebtDetails.length > 0) {
   new Chart(debtCtx, {
     type: "doughnut",
     data: {
-      labels: debtData.map(item => item.name || "Unknown"), // Labels for the chart (debt names)
+      labels: currentMonthDebtDetails.map(item => item.name || "Unknown"), // Labels for the chart (debt names)
       datasets: [
         {
-          data: debtData.map(item => item.value || 0), // Data for the chart (debt values)
+          data: currentMonthDebtDetails.map(item => item.value || 0), // Data for the chart (debt values)
           backgroundColor: ["#3572EF", "#3ABEF9", "#A7E6FF"], // Colors for the doughnut slices
           borderWidth: 1, // Border width for each slice
         },
