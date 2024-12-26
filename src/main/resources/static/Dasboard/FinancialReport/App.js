@@ -38,4 +38,30 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   });
 
+  // user image clicking and dropdown
+document.addEventListener("DOMContentLoaded", () => {
+  const userImage = document.getElementById("userImage");
+  const dropdownMenu = document.getElementById("dropdownMenu");
+
+  // Toggle dropdown visibility on image click
+  userImage.addEventListener("click", (event) => {
+    event.stopPropagation(); // Prevent triggering outside click event
+    dropdownMenu.style.display =
+      dropdownMenu.style.display === "block" ? "none" : "block";
+  });
+
+  // Close dropdown if clicked outside
+  document.addEventListener("click", () => {
+    dropdownMenu.style.display = "none";
+  });
+
+  // Logout button functionality
+  const logoutButton = document.getElementById("logoutButton");
+  logoutButton.addEventListener("click", () => {
+    alert("Logged out!");
+    window.location.href = "/User_login/login.html"; // Adjust redirection path if needed
+  });
+});
+
+
 

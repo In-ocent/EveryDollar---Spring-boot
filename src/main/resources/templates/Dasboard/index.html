@@ -79,44 +79,49 @@
       <section class="data-cards">
         <div class="card">
           <h3>Asset Value</h3>
-          <h1>$625,375</h1>
+          <h1 th:text="'$ ' + ${dashboardData.totalAssets}">$625,375</h1>
           <canvas id="assetChart"></canvas>
         </div>
         <div class="card">
           <h3>Debt Value</h3>
-          <h1>$375,375</h1>
+          <h1 th:text="'$ ' + ${dashboardData.totalDebts}">$375,375</h1>
           <canvas id="debtChart"></canvas>
         </div>
         <div class="card third-card">
           <div class="card small">
             <h3>Income</h3>
-            <h1>$10,448</h1>
+            <h1 th:text="'$ ' + ${dashboardData.monthlyIncome}">$10,448</h1>
           </div>
           <div class="card small">
-            <h3>Spending</h3>
-            <h1>$2,875</h1>
+            <h3>Total Budget</h3>
+            <h1 th:text="'$ ' + ${dashboardData.totalSpending}">$2,875</h1>
           </div>
         </div>
-        
       </section>
 
       <!-- Action Plan Section -->
       <section class="action-plan">
         <div class="plan">
           <h3>Action Plans</h3>
-          <div class="plan-item">
-            <span>Buy a car</span>
-            <progress value="25000" max="30000"></progress>
-          </div>
-          <div class="plan-item">
-            <span>Wedding</span>
-            <progress value="20000" max="30000"></progress>
+          <div th:each="goal : ${dashboardData.goals}" class="plan-item">
+            <span th:text="${goal.name}">Goal Name</span>
+            <progress th:value="${goal.progressValue}" th:max="${goal.targetValue}"></progress>
           </div>
         </div>
       </section>
+
     </main>
   </div>
+
+  <script th:inline="javascript">
+    // Safely pass asset and debt data to JavaScript
+    const assetData = JSON.parse(/*[[${assetDetailsJson}]]*/ '[]');
+    const debtData = JSON.parse(/*[[${debtDetailsJson}]]*/ '[]');
+  </script>
+
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
   <script src="/Dasboard/App.js"></script>
+
+  
 </body>
 </html>

@@ -99,7 +99,7 @@ public class BudgetController {
     private List<Expense> essentialExpenses = new ArrayList<>();
     
     // Array to store optional spending
-    private Expense[] optionalSpending = new Expense[100]; // Example max size of 100
+    private Expense[] optionalSpending = new Expense[50]; // Example max size of 100
     private int optionalSpendingIndex = -1; // Stack pointer for the array
 
     // Endpoint to get all essential expenses

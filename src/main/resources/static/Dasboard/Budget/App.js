@@ -157,6 +157,7 @@ function initializePage() {
     fetchIncomeSources();
     fetchEssentialExpenses();
     fetchOptionalSpending();
+    updateTotalBudget();
 }
 
 // Event listener for page load
@@ -229,6 +230,7 @@ function addEssentialExpense() {
     })
         .then(() => {
             fetchEssentialExpenses();
+            updateTotalBudget();
             document.getElementById("bills-placeholder").style.display = 'none'; // Hide placeholder after adding
             document.getElementById("bills-item").value = ""; // Clear the input field
             document.getElementById("bills-amount").value = ""; // Clear the input field
@@ -244,6 +246,7 @@ function deleteEssentialExpense(index) {
     })
         .then(() => {
             fetchEssentialExpenses();
+            updateTotalBudget();
         })
         .catch((error) => console.error("Error deleting essential expense:", error));
 }
@@ -298,6 +301,7 @@ function addOptionalSpending() {
     })
         .then(() => {
             fetchOptionalSpending();
+            updateTotalBudget();
             document.getElementById("fun-placeholder").style.display = 'none'; // Hide placeholder after adding
             document.getElementById("fun-item").value = ""; // Clear the input field
             document.getElementById("fun-amount").value = ""; // Clear the input field
@@ -312,7 +316,51 @@ function removeLastOptionalSpending() {
     })
         .then(() => {
             fetchOptionalSpending();
+            updateTotalBudget();
         })
         .catch((error) => console.error("Error removing last optional spending item:", error));
 }
 
+function updateTotalBudget() {
+    Promise.all([
+        fetch("http://localhost:8080/budget/essential-expenses", { method: "GET" }).then(response => response.json()),
+        fetch("http://localhost:8080/budget/optional-spending", { method: "GET" }).then(response => response.json()),
+    ])
+        .then(([essentialExpenses, optionalSpending]) => {
+            let totalEssential = essentialExpenses.reduce((total, expense) => total + expense.amount, 0);
+            let totalOptional = optionalSpending.reduce((total, spending) => total + (spending ? spending.amount : 0), 0);
+
+            // Update Total Budget
+            const totalBudgetElement = document.getElementById("headerTotalDebts");
+            totalBudgetElement.textContent = `$${(totalEssential + totalOptional).toFixed(2)}`;
+        })
+        .catch(error => console.error("Error updating total budget:", error));
+}
+
+
+  // user image clicking and dropdown
+  document.addEventListener("DOMContentLoaded", () => {
+    const userImage = document.getElementById("userImage");
+    const dropdownMenu = document.getElementById("dropdownMenu");
+  
+    // Toggle dropdown visibility on image click
+    userImage.addEventListener("click", (event) => {
+      event.stopPropagation(); // Prevent triggering outside click event
+      dropdownMenu.style.display =
+        dropdownMenu.style.display === "block" ? "none" : "block";
+    });
+  
+    // Close dropdown if clicked outside
+    document.addEventListener("click", () => {
+      dropdownMenu.style.display = "none";
+    });
+  
+    // Logout button functionality
+    const logoutButton = document.getElementById("logoutButton");
+    logoutButton.addEventListener("click", () => {
+      alert("Logged out!");
+      window.location.href = "/User_login/login.html"; // Adjust redirection path if needed
+    });
+  });
+  
+  

@@ -129,55 +129,86 @@ document.getElementById('btnDebt').addEventListener('click', () => {
 createChart(chartData.netWorth);
 setActiveButton('btnNetWorth');
 
-// Doughnut Charts
+// Render Doughnut Chart for Assets
 const assetCtx = document.getElementById("assetChart").getContext("2d");
-new Chart(assetCtx, {
-  type: "doughnut",
-  data: {
-    labels: ["Property", "Investments", "Cash"],
-    datasets: [
-      {
-        data: [40, 30, 30],
-        backgroundColor: ["#3ABEF9", "#A7E6FF", "#3572EF"],
+if (assetData && assetData.length > 0) {
+  new Chart(assetCtx, {
+    type: "doughnut",
+    data: {
+      labels: assetData.map(item => item.name || "Unknown"), // Labels for the chart (asset names)
+      datasets: [
+        {
+          data: assetData.map(item => item.value || 0), // Data for the chart (asset values)
+          backgroundColor: ["#3ABEF9", "#A7E6FF", "#3572EF"], // Colors for the doughnut slices
+          borderWidth: 1, // Border width for each slice
+        },
+      ],
+    },
+    options: {
+      responsive: true,
+      plugins: {
+        legend: {
+          display: true,
+          position: "top",
+        },
+        tooltip: {
+          enabled: true,
+        },
       },
-    ],
-  },
-});
+    },
+  });
+}
 
+// Render Doughnut Chart for Debts
 const debtCtx = document.getElementById("debtChart").getContext("2d");
-new Chart(debtCtx, {
-  type: "doughnut",
-  data: {
-    labels: ["Personal", "Business", "Government"],
-    datasets: [
-      {
-        data: [15, 55, 30],
-        backgroundColor: ["#3572EF", "#3ABEF9", "#A7E6FF"],
+if (debtData && debtData.length > 0) {
+  new Chart(debtCtx, {
+    type: "doughnut",
+    data: {
+      labels: debtData.map(item => item.name || "Unknown"), // Labels for the chart (debt names)
+      datasets: [
+        {
+          data: debtData.map(item => item.value || 0), // Data for the chart (debt values)
+          backgroundColor: ["#3572EF", "#3ABEF9", "#A7E6FF"], // Colors for the doughnut slices
+          borderWidth: 1, // Border width for each slice
+        },
+      ],
+    },
+    options: {
+      responsive: true,
+      plugins: {
+        legend: {
+          display: true,
+          position: "top",
+        },
+        tooltip: {
+          enabled: true,
+        },
       },
-    ],
-  },
-}); 
+    },
+  });
+}
 
+function updateTotalBudget() {
+  Promise.all([
+      fetch("http://localhost:8080/budget/essential-expenses", { method: "GET" }).then(response => response.json()),
+      fetch("http://localhost:8080/budget/optional-spending", { method: "GET" }).then(response => response.json()),
+  ])
+      .then(([essentialExpenses, optionalSpending]) => {
+          let totalEssential = essentialExpenses.reduce((total, expense) => total + expense.amount, 0);
+          let totalOptional = optionalSpending.reduce((total, spending) => total + (spending ? spending.amount : 0), 0);
 
-// function getDashboardOverview() {
-//   fetch('http://localhost:8080/Dashboard/', {
-//       method: 'GET',
-//       credentials: 'include',
-//       headers: { 'Content-Type': 'application/json' }
-//   })
-//   .then(response => response.json())
-//   .then(data => {
-//       if (data) {
-//           console.log(data);
-//           // Update UI with the fetched data
-//       }
-//   })
-//   .catch(error => {
-//       console.error('Error fetching dashboard overview:', error);
-//   });
-// }
+          // Update Total Budget
+          const totalBudgetElement = document.querySelector(".card.small:nth-of-type(2) h1");
+          if (totalBudgetElement) {
+              totalBudgetElement.textContent = `$${(totalEssential + totalOptional).toFixed(2)}`;
+          } else {
+              console.error("Total Budget element not found in the DOM.");
+          }
 
-// getDashboardOverview();
+      })
+      .catch(error => console.error("Error updating total budget:", error));
+}
 
 
 // user image clicking and dropdown
@@ -191,6 +222,8 @@ document.addEventListener("DOMContentLoaded", () => {
     dropdownMenu.style.display =
       dropdownMenu.style.display === "block" ? "none" : "block";
   });
+
+  updateTotalBudget();
 
   // Close dropdown if clicked outside
   document.addEventListener("click", () => {

@@ -42,11 +42,11 @@
     <header>
       <div class="header-left">
         <h1>Dashboard</h1>
-        <p id="currentDate"></p>
+        <p th:text="${#strings.capitalize(currentDay.toLowerCase()) + ', ' + currentDate}"></p>
       </div>
       <div class="dropdown">
         <div class="user-info">
-          <span id="username"></span>
+          <span th:text="${username}" class="user-name"></span>
           <img 
             src="/Dasboard/user.jpg" 
             alt="User" 

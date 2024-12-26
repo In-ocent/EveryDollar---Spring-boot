@@ -1,6 +1,7 @@
 package com.EveryDollar.demo.repository;
 
 import java.math.BigDecimal;
+import java.util.List;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
@@ -40,4 +41,12 @@ public interface ReportRepository extends JpaRepository<BudgetEntity, Long> {
     // Count Total Goals
     @Query("SELECT COUNT(g) FROM GoalsEntity g WHERE g.user = :user")
     Long countTotalGoals(@Param("user") UserEntity user);
+
+
+    @Query("SELECT n.name, n.value FROM NetworthEntity n WHERE n.user = :user AND n.type = 'asset'")
+    List<Object[]> getAssetTypesWithValues(@Param("user") UserEntity user);
+
+    @Query("SELECT n.name, n.value FROM NetworthEntity n WHERE n.user = :user AND n.type = 'debt'")
+    List<Object[]> getDebtTypesWithValues(@Param("user") UserEntity user);
+
 }
