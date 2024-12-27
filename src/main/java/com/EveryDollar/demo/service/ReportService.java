@@ -52,12 +52,6 @@ public class ReportService {
         BigDecimal totalDebts = reportRepository.getTotalDebts(user);
         reportData.put("totalDebts", totalDebts != null ? totalDebts : BigDecimal.ZERO);
 
-        // // Fetch achieved and total goals
-        // Long achievedGoals = reportRepository.countAchievedGoals(user);
-        // Long totalGoals = reportRepository.countTotalGoals(user);
-        // reportData.put("achievedGoals", achievedGoals != null ? achievedGoals : 0);
-        // reportData.put("totalGoals", totalGoals != null ? totalGoals : 0);
-
          // Fetch goals' progress only for the current month
         if (month == currentMonth) {
             Long achievedGoals = reportRepository.countAchievedGoals(user);

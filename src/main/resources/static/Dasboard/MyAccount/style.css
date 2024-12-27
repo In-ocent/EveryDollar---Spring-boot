@@ -233,6 +233,14 @@ header {
   margin-top: 10px;
 }
 
+.button-container {
+  display: flex;
+  justify-content: center;
+  gap: 10px; /* Space between buttons */
+  margin-top: 20px; /* Space above the buttons */
+}
+
+
 .change-password-heading {
   text-align: center;
   /* margin-bottom: 20px; */
@@ -274,12 +282,6 @@ header {
   border-radius: 15px;
   height: 60%;
 }
-/* .Myaccount{
-  display: grid;
-  grid-template-columns: 1fr 1fr; /* Two columns 
-  grid-gap: 10px;
-  margin-top: 6%;
-} */
 
 .rounded-image {
   width: 40px;

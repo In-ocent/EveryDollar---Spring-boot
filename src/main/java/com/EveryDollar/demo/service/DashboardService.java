@@ -2,6 +2,7 @@ package com.EveryDollar.demo.service;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -71,6 +72,33 @@ public class DashboardService {
         List<GoalsEntity> goals = goalsRepository.findByUserOrderByDateAsc(user, currentMonth, currentYear, PageRequest.of(0, 2));
         dashboardData.put("goals", goals);
 
+
+         // Fetch 12 months' data
+        List<Object[]> monthlyAssets = dashboardRepository.getMonthlyAssets(user);
+        List<Object[]> monthlyDebts = dashboardRepository.getMonthlyDebts(user);
+        List<Object[]> monthlyNetWorth = dashboardRepository.getMonthlyNetWorth(user);
+
+        // Format the data into arrays for the frontend
+        BigDecimal[] assetsData = new BigDecimal[12];
+        BigDecimal[] debtsData = new BigDecimal[12];
+        BigDecimal[] netWorthData = new BigDecimal[12];
+        Arrays.fill(assetsData, BigDecimal.ZERO);
+        Arrays.fill(debtsData, BigDecimal.ZERO);
+        Arrays.fill(netWorthData, BigDecimal.ZERO);
+
+        // Populate data
+        for (Object[] entry : monthlyAssets) {
+            assetsData[(int) entry[0] - 1] = (BigDecimal) entry[1];
+        }
+        for (Object[] entry : monthlyDebts) {
+            debtsData[(int) entry[0] - 1] = (BigDecimal) entry[1];
+        }
+        for (Object[] entry : monthlyNetWorth) {
+            netWorthData[(int) entry[0] - 1] = (BigDecimal) entry[1];
+        }
+        dashboardData.put("assetsData", assetsData);
+        dashboardData.put("debtsData", debtsData);
+        dashboardData.put("netWorthData", netWorthData);
 
         return dashboardData;
     }

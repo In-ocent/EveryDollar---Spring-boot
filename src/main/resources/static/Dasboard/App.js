@@ -1,4 +1,3 @@
-
 // Variables to store chart and data
 let chart;
 
@@ -8,10 +7,9 @@ const chartData = {
     labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
     datasets: [{
       label: 'Net Worth ($)',
-      data: [0, 50000, 100000, 250000, 400000, 600000, 700000, 350000, 800000, 850000, 400000, 1000000],
+      data: [], // Dynamic data will be loaded here
       borderColor: '#608BC1',
       backgroundColor: 'rgba(51, 179, 166, 0.1)',
-      // backgroundColor: '#d9e5f2',
       fill: true,
       tension: 0.4,
       pointBackgroundColor: '#133E87',
@@ -23,7 +21,7 @@ const chartData = {
     labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
     datasets: [{
       label: 'Assets ($)',
-      data: [50000, 70000, 120000, 300000, 450000, 650000, 800000, 850000, 900000, 950000, 970000, 1000000],
+      data: [], // Dynamic data will be loaded here
       borderColor: '#608BC1',
       backgroundColor: 'rgba(76, 175, 80, 0.1)',
       fill: true,
@@ -37,7 +35,7 @@ const chartData = {
     labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
     datasets: [{
       label: 'Debt ($)',
-      data: [30000, 40000, 60000, 80000, 100000, 120000, 140000, 150000, 160000, 170000, 180000, 200000],
+      data: [], // Dynamic data will be loaded here
       borderColor: '#608BC1',
       backgroundColor: 'rgba(244, 67, 54, 0.1)',
       fill: true,
@@ -49,55 +47,124 @@ const chartData = {
   }
 };
 
+document.addEventListener("DOMContentLoaded", () => {
+  fetchChartData();
+});
+
+function fetchChartData() {
+  fetch("/Dashboard/chart-data")
+  .then(response => {
+    if (!response.ok) {
+      throw new Error("Failed to fetch chart data.");
+    }
+    return response.json();
+  })
+  .then(chartDataResponse => {
+    // Update datasets dynamically
+    chartData.netWorth.datasets[0].data = chartDataResponse.netWorthData.map(value => parseFloat(value) || 0);
+    chartData.assets.datasets[0].data = chartDataResponse.assetsData.map(value => parseFloat(value) || 0);
+    chartData.debt.datasets[0].data = chartDataResponse.debtsData.map(value => parseFloat(value) || 0);
+
+    // Initialize with Net Worth chart
+    createChart(chartData.netWorth);
+    setActiveButton('btnNetWorth');
+  })
+  .catch(error => {
+    console.error("Error fetching chart data:", error);
+    alert("Failed to load chart data. Please try again later.");
+  });
+}
+
+document.getElementById('btnNetWorth').addEventListener('click', () => {
+  setActiveButton('btnNetWorth');
+  createChart(chartData.netWorth);
+});
+
+document.getElementById('btnAssets').addEventListener('click', () => {
+  setActiveButton('btnAssets');
+  createChart(chartData.assets);
+});
+
+document.getElementById('btnDebt').addEventListener('click', () => {
+  setActiveButton('btnDebt');
+  createChart(chartData.debt);
+});
+  
 // Function to create a chart
 function createChart(data) {
+  const dataSetData = data.datasets[0];
   const ctx = document.getElementById('lineChart').getContext('2d');
-
   // Destroy existing chart if present
   if (chart) {
     chart.destroy();
-  }
 
-  // Create a new chart
+  }
+  
+  // Dynamically calculate max value for the Y-axis
+  const minYValue = Math.min(...data.datasets[0].data);
+  const maxYValue = Math.max(...data.datasets[0].data);
+  
+  // Calculate step size dynamically (e.g., 10% of the range or a fixed number)
+  const range = maxYValue - minYValue;
+  const stepSize = range / 5 || 1; 
+  // Recreate chart
   chart = new Chart(ctx, {
     type: 'line',
-    data: data,
+    data: {
+      labels: data.labels, // Ensure the labels are correctly passed
+      datasets: [
+        {
+          label: data.datasets[0].label,
+          data: data.datasets[0].data,
+          borderColor: data.datasets[0].borderColor,
+          backgroundColor: data.datasets[0].backgroundColor,
+          fill: data.datasets[0].fill,
+          tension: data.datasets[0].tension,
+          pointBackgroundColor: data.datasets[0].pointBackgroundColor,
+          pointBorderColor: data.datasets[0].pointBorderColor,
+          pointRadius: data.datasets[0].pointRadius,
+        },
+      ],
+// Dynamically updated datasets
+    },
     options: {
       responsive: true,
       maintainAspectRatio: false,
       plugins: {
         legend: {
-          display: false
+          display: true,
         },
         tooltip: {
           enabled: true,
           backgroundColor: data.datasets[0].borderColor,
           borderColor: '#fff',
-          borderWidth: 1
-        }
+          borderWidth: 1,
+        },
       },
       scales: {
         x: {
           grid: {
-            display: false
-          },
-          ticks: {
-            color: '#133E87'
-          }
-        },
-        y: {
-          grid: {
-            color: '#eee'
+            display: false,
           },
           ticks: {
             color: '#133E87',
-            callback: (value) => `$${value.toLocaleString()}`,
-            stepSize: 250000, // Interval between ticks
-            max: 1000000      // Maximum value
-          }
-        }
-      }
-    }
+          },
+        },
+        y: {
+          grid: {
+            color: '#eee',
+          },
+          ticks: {
+            color: '#133E87',
+            min: minYValue, // Set dynamic minimum
+            max: maxYValue, // Set dynamic maximum
+            stepSize: stepSize, // Set dynamic step size
+            callback: (value) => `$${value.toLocaleString()}`, // Format ticks
+          },
+          // suggestedMax: maxYValue + maxYValue * 0.1, // Add 10% padding above max value
+        },
+      },
+    },
   });
 }
 
@@ -126,8 +193,12 @@ document.getElementById('btnDebt').addEventListener('click', () => {
 });
 
 // Initialize with Net Worth data
-createChart(chartData.netWorth);
-setActiveButton('btnNetWorth');
+// createChart(chartData.netWorth);
+// setActiveButton('btnNetWorth');
+
+
+
+
 
 // Render Doughnut Chart for Assets
 const assetCtx = document.getElementById("assetChart").getContext("2d");

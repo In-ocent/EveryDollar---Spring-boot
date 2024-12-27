@@ -11,6 +11,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.EveryDollar.demo.entity.UserEntity;
 import com.EveryDollar.demo.service.DashboardService;
@@ -62,5 +63,16 @@ public class DashboardController {
         } else {
             return "redirect:/User_login/login.html"; // Redirect to login page if session is invalid
         }
+    }
+
+    @GetMapping("/chart-data")
+    @ResponseBody
+    public Map<String, Object> getChartData(HttpSession session) {
+        UserEntity loggedInUser = (UserEntity) session.getAttribute("loggedInUser");
+        if (loggedInUser == null) {
+            throw new RuntimeException("User not logged in");
+        }
+
+        return dashboardService.getDashboardData(loggedInUser);
     }
 }
