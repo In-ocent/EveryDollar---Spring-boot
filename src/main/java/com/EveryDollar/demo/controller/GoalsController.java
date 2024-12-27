@@ -108,13 +108,13 @@ public class GoalsController {
     // Get all goals for the logged-in user
     @GetMapping
     @ResponseBody
-    public List<GoalsEntity> getGoals(HttpSession session) {
+    public List<GoalsEntity> getCurrentMonthGoals(HttpSession session) {
         UserEntity loggedInUser = (UserEntity) session.getAttribute("loggedInUser");
         if (loggedInUser == null) {
             throw new RuntimeException("User not logged in");
         }
 
-        return goalsService.getGoals(loggedInUser);
+        return goalsService.getCurrentMonthGoals(loggedInUser);
     }
 }
 

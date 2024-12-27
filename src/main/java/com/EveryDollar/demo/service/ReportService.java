@@ -65,9 +65,6 @@ public class ReportService {
         BigDecimal netWorth = (monthlyAssets != null ? monthlyAssets : BigDecimal.ZERO)
                                 .subtract(monthlyDebts != null ? monthlyDebts : BigDecimal.ZERO);
         reportData.put("netWorth", netWorth);
-        // BigDecimal netWorth = (totalAssets != null ? totalAssets : BigDecimal.ZERO)
-        //                         .subtract(totalDebts != null ? totalDebts : BigDecimal.ZERO);
-        // reportData.put("netWorth", netWorth);
 
         // Add month information
         reportData.put("month", LocalDate.now().withMonth(month).getMonth().toString());

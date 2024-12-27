@@ -35,8 +35,10 @@ public class GoalsService {
         goalRepository.save(goal);
     }
 
-    public List<GoalsEntity> getGoals(UserEntity user) {
-        return goalRepository.findByUser(user);
+    public List<GoalsEntity> getCurrentMonthGoals(UserEntity user) {
+        int currentMonth = LocalDate.now().getMonthValue();
+        int currentYear = LocalDate.now().getYear();
+        return goalRepository.findCurrentMonthGoals(user, currentMonth, currentYear);
     }
 
     public void deleteGoal(String name, UserEntity user) {

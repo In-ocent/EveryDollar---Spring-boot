@@ -55,29 +55,6 @@ public class DashboardService {
             .toList();
         dashboardData.put("currentMonthDebtDetails", formattedDebtDetails.isEmpty() ? List.of() : formattedDebtDetails);
 
-
-        // Fetch total assets
-        // BigDecimal totalAssets = reportRepository.getTotalAssets(user);
-        // dashboardData.put("totalAssets", totalAssets != null ? totalAssets : BigDecimal.ZERO);
-
-        // // Fetch total debts
-        // BigDecimal totalDebts = reportRepository.getTotalDebts(user);
-        // dashboardData.put("totalDebts", totalDebts != null ? totalDebts : BigDecimal.ZERO);
-
-        // // Fetch asset details
-        // List<Object[]> assetDetails = reportRepository.getAssetTypesWithValues(user);
-        // List<Map<String, Object>> formattedAssetDetails = assetDetails.stream()
-        //     .map(obj -> Map.of("name", obj[0], "value", obj[1]))
-        //     .toList();
-        // dashboardData.put("assetDetails", formattedAssetDetails.isEmpty() ? List.of() : formattedAssetDetails);
-
-        // // Fetch debt details
-        // List<Object[]> debtDetails = reportRepository.getDebtTypesWithValues(user);
-        // List<Map<String, Object>> formattedDebtDetails = debtDetails.stream()
-        //     .map(obj -> Map.of("name", obj[0], "value", obj[1]))
-        //     .toList();
-        // dashboardData.put("debtDetails", formattedDebtDetails.isEmpty() ? List.of() : formattedDebtDetails);
-
         
         // Fetch monthly income
         Double monthlyIncome = reportRepository.getMonthlyIncome(user, LocalDate.now().getMonthValue());
@@ -91,8 +68,9 @@ public class DashboardService {
         dashboardData.put("totalSpending", totalSpending);
 
         // Fetch the first two goals
-        List<GoalsEntity> goals = goalsRepository.findByUserOrderByDateAsc(user, PageRequest.of(0, 2));
+        List<GoalsEntity> goals = goalsRepository.findByUserOrderByDateAsc(user, currentMonth, currentYear, PageRequest.of(0, 2));
         dashboardData.put("goals", goals);
+
 
         return dashboardData;
     }
