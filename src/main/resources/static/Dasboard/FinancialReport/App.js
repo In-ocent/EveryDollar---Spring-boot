@@ -1,34 +1,54 @@
 document.addEventListener("DOMContentLoaded", () => {
-    // const month = new Date().getMonth() + 1; // Get current month (1 = January, ..., 12 = December)
+
+  function getExpensesForCurrentMonth() {
+    return Promise.all([
+      fetch("http://localhost:8080/budget/essential-expenses", { method: "GET" }).then((response) =>
+        response.json()
+      ),
+      fetch("http://localhost:8080/budget/optional-spending", { method: "GET" }).then((response) =>
+        response.json()
+      ),
+    ]).then(([essentialExpenses, optionalSpending]) => {
+      const totalEssential = essentialExpenses.reduce((total, expense) => total + expense.amount, 0);
+      const totalOptional = optionalSpending.reduce((total, spending) => total + (spending ? spending.amount : 0), 0);
+      const totalExpenses = totalEssential + totalOptional;
   
-    // fetch(`/financial-report/${month}`)
-    //   .then((response) => {
-    //     if (!response.ok) {
-    //       throw new Error("Failed to fetch the financial report.");
-    //     }
-    //     return response.json();
-    //   })
-    //   .then((data) => {
-    //     // Populate the financial report table
-    //     document.getElementById("month").textContent = data.month;
-    //     document.getElementById("monthlyIncome").textContent = `$${data.monthlyIncome.toFixed(2)}`;
-    //     document.getElementById("essentialExpenses").textContent = `$${data.essentialExpenses.toFixed(2)}`;
-    //     document.getElementById("optionalExpenses").textContent = `$${data.optionalExpenses.toFixed(2)}`;
-    //     document.getElementById("totalExpenses").textContent = `$${data.totalExpenses.toFixed(2)}`;
-    //     document.getElementById("netWorth").textContent = `$${data.netWorth.toFixed(2)}`;
-    //     document.getElementById("goalsStatus").textContent = `${data.achievedGoals} / ${data.totalGoals}`;
-    //   })
-    fetch(`/financial-report/all`)
-    .then((response) => {
-      if (!response.ok) {
-        throw new Error("Failed to fetch financial reports for all months.");
-      }
-      return response.json();
-    })
-    .then((allData) => {
-      const tableBody = document.querySelector("table tbody"); // Select the table body
-      allData.forEach((data) => {
-        const row = document.createElement("tr");
+      return {
+        essential: totalEssential,
+        optional: totalOptional,
+        total: totalExpenses,
+      };
+    });
+  }
+
+    
+  fetch(`/financial-report/all`)
+  .then((response) => {
+    if (!response.ok) {
+      throw new Error("Failed to fetch financial reports for all months.");
+    }
+    return response.json();
+  })
+  .then(async (allData) => {
+    const tableBody = document.querySelector("table tbody"); // Select the table body
+
+    for (const data of allData) {
+      const row = document.createElement("tr");
+
+      if (data.month.toLowerCase() === "december") {
+        // Fetch current month expenses for December
+        const expenses = await getExpensesForCurrentMonth();
+        row.innerHTML = `
+          <td>${data.month}</td>
+          <td>$${data.monthlyIncome.toFixed(2)}</td>
+          <td>$${expenses.essential.toFixed(2)}</td>
+          <td>$${expenses.optional.toFixed(2)}</td>
+          <td>$${expenses.total.toFixed(2)}</td>
+          <td>$${data.netWorth.toFixed(2)}</td>
+          <td>${data.achievedGoals} / ${data.totalGoals}</td>
+        `;
+      } else {
+        // Render other months as-is
         row.innerHTML = `
           <td>${data.month}</td>
           <td>$${data.monthlyIncome.toFixed(2)}</td>
@@ -38,13 +58,16 @@ document.addEventListener("DOMContentLoaded", () => {
           <td>$${data.netWorth.toFixed(2)}</td>
           <td>${data.achievedGoals} / ${data.totalGoals}</td>
         `;
-        tableBody.appendChild(row);
-      });
-    })
-      .catch((error) => {
-        console.error("Error:", error);
-        alert("Failed to load the financial report. Please try again later.");
-      });
+      }
+
+      tableBody.appendChild(row);
+    }
+  })
+  .catch((error) => {
+    console.error("Error:", error);
+    alert("Failed to load the financial report. Please try again later.");
+  });
+
   
     // Download Report (using a library like jsPDF or server-generated PDF)
     document.getElementById("downloadReport").addEventListener("click", () => {
