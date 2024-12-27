@@ -38,4 +38,9 @@ public class NetworthService {
         entry.setCreatedAt(LocalDateTime.now()); // Set createdAt field
         return networthRepository.save(entry);
     }
+
+    public void deleteEntry(Long id) {
+        networthRepository.deleteById(id);
+    }
+    
 }

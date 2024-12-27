@@ -68,6 +68,29 @@ function calculateNetWorth() {
 
   
 // Fetch assets and display them
+// function fetchAssets() {
+//   fetch("http://localhost:8080/networth/current-month-assets")
+//       .then(response => response.json())
+//       .then(data => {
+//           const assetsList = document.getElementById("assets-list");
+//           assetsList.innerHTML = ""; // Clear previous entries
+//           let totalAssets = 0;
+
+//           data.forEach(asset => {
+//               totalAssets += asset.value;
+//               const item = document.createElement("div");
+//               item.classList.add("item");
+//               item.innerHTML = `<span>${asset.name}: $${asset.value.toFixed(2)}</span>`;
+//               assetsList.appendChild(item);
+//           });
+
+//           document.getElementById("headerTotalAssets").textContent = `$${totalAssets.toFixed(2)}`;
+//           document.getElementById("totalAssets").textContent = `Total Assets: $${totalAssets.toFixed(2)}`;
+//           calculateNetWorth();
+//       })
+//       .catch(error => console.error("Error fetching assets:", error));
+// }
+
 function fetchAssets() {
   fetch("http://localhost:8080/networth/current-month-assets")
       .then(response => response.json())
@@ -80,7 +103,12 @@ function fetchAssets() {
               totalAssets += asset.value;
               const item = document.createElement("div");
               item.classList.add("item");
-              item.innerHTML = `<span>${asset.name}: $${asset.value.toFixed(2)}</span>`;
+              item.innerHTML = `
+                  <span>${asset.name}: $${asset.value.toFixed(2)}</span>
+                  <button class="delete-button" onclick="deleteEntry(${asset.id}, 'asset')">
+                      <i class="fa-solid fa-trash" aria-label="Delete"></i>
+                  </button>
+              `;
               assetsList.appendChild(item);
           });
 
@@ -91,7 +119,6 @@ function fetchAssets() {
       .catch(error => console.error("Error fetching assets:", error));
 }
 
-// Fetch debts and display them
 function fetchDebts() {
   fetch("http://localhost:8080/networth/current-month-debts")
       .then(response => response.json())
@@ -104,7 +131,12 @@ function fetchDebts() {
               totalDebts += debt.value;
               const item = document.createElement("div");
               item.classList.add("item");
-              item.innerHTML = `<span>${debt.name}: $${debt.value.toFixed(2)}</span>`;
+              item.innerHTML = `
+                  <span>${debt.name}: $${debt.value.toFixed(2)}</span>
+                  <button class="delete-button" onclick="deleteEntry(${debt.id}, 'debt')">
+                      <i class="fa-solid fa-trash" aria-label="Delete"></i>
+                  </button>
+              `;
               debtsList.appendChild(item);
           });
 
@@ -114,6 +146,49 @@ function fetchDebts() {
       })
       .catch(error => console.error("Error fetching debts:", error));
 }
+
+function deleteEntry(id, type) {
+  fetch(`http://localhost:8080/networth/delete/${id}`, {
+      method: "DELETE"
+  })
+      .then(response => {
+          if (!response.ok) {
+              throw new Error("Failed to delete entry.");
+          }
+          return response.text();
+      })
+      .then(message => {
+          alert(message);
+          if (type === "asset") fetchAssets();
+          else fetchDebts();
+      })
+      .catch(error => alert(`Error: ${error.message}`));
+}
+
+
+// // Fetch debts and display them
+// function fetchDebts() {
+//   fetch("http://localhost:8080/networth/current-month-debts")
+//       .then(response => response.json())
+//       .then(data => {
+//           const debtsList = document.getElementById("debts-list");
+//           debtsList.innerHTML = ""; // Clear previous entries
+//           let totalDebts = 0;
+
+//           data.forEach(debt => {
+//               totalDebts += debt.value;
+//               const item = document.createElement("div");
+//               item.classList.add("item");
+//               item.innerHTML = `<span>${debt.name}: $${debt.value.toFixed(2)}</span>`;
+//               debtsList.appendChild(item);
+//           });
+
+//           document.getElementById("headerTotalDebts").textContent = `$${totalDebts.toFixed(2)}`;
+//           document.getElementById("totalDebts").textContent = `Total Debts: $${totalDebts.toFixed(2)}`;
+//           calculateNetWorth();
+//       })
+//       .catch(error => console.error("Error fetching debts:", error));
+// }
 
 // Add an asset or debt
 function addEntry(type) {

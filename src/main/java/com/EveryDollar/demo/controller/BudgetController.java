@@ -73,25 +73,25 @@ public class BudgetController {
 
     
 
-    @GetMapping("/total-income")
-    @ResponseBody
-    public BigDecimal getTotalIncome(HttpSession session) {
-        UserEntity loggedInUser = (UserEntity) session.getAttribute("loggedInUser");
-        if (loggedInUser == null) {
-            throw new RuntimeException("User not logged in");
-        }
-        return budgetService.getTotalIncome(loggedInUser);
-    }
+    // @GetMapping("/total-income")
+    // @ResponseBody
+    // public BigDecimal getTotalIncome(HttpSession session) {
+    //     UserEntity loggedInUser = (UserEntity) session.getAttribute("loggedInUser");
+    //     if (loggedInUser == null) {
+    //         throw new RuntimeException("User not logged in");
+    //     }
+    //     return budgetService.getTotalIncome(loggedInUser);
+    // }
 
-    @GetMapping("/income-sources")
-    @ResponseBody
-    public List<BudgetEntity> getAllIncomeSources(HttpSession session) {
-        UserEntity loggedInUser = (UserEntity) session.getAttribute("loggedInUser");
-        if (loggedInUser == null) {
-            throw new RuntimeException("User not logged in");
-        }
-        return budgetService.getAllIncomeSources(loggedInUser);
-    }
+    // @GetMapping("/income-sources")
+    // @ResponseBody
+    // public List<BudgetEntity> getAllIncomeSources(HttpSession session) {
+    //     UserEntity loggedInUser = (UserEntity) session.getAttribute("loggedInUser");
+    //     if (loggedInUser == null) {
+    //         throw new RuntimeException("User not logged in");
+    //     }
+    //     return budgetService.getAllIncomeSources(loggedInUser);
+    // }
 
     @GetMapping("/current-month-income-sources")
     @ResponseBody

@@ -35,15 +35,15 @@ public class BudgetService {
     }
     
 
-    public BigDecimal getTotalIncome(UserEntity user) {
-        return budgetRepository.findByUser(user).stream()
-                .map(BudgetEntity::getAmount)
-                .reduce(BigDecimal.ZERO, BigDecimal::add);
-    }
+    // public BigDecimal getTotalIncome(UserEntity user) {
+    //     return budgetRepository.findByUser(user).stream()
+    //             .map(BudgetEntity::getAmount)
+    //             .reduce(BigDecimal.ZERO, BigDecimal::add);
+    // }
 
-    public List<BudgetEntity> getAllIncomeSources(UserEntity user) {
-        return budgetRepository.findByUser(user);
-    }
+    // public List<BudgetEntity> getAllIncomeSources(UserEntity user) {
+    //     return budgetRepository.findByUser(user);
+    // }
 
     public List<BudgetEntity> getCurrentMonthIncomeSources(UserEntity user) {
         int currentMonth = LocalDate.now().getMonthValue();
