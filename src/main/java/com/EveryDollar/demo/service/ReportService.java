@@ -25,6 +25,7 @@ public class ReportService {
      */
     public Map<String, Object> generateMonthlyReport(UserEntity user, int month) {
         Map<String, Object> reportData = new HashMap<>();
+        int currentMonth = LocalDate.now().getMonthValue();
 
         // Fetch monthly income
         Double monthlyIncome = reportRepository.getMonthlyIncome(user, month);
@@ -51,11 +52,22 @@ public class ReportService {
         BigDecimal totalDebts = reportRepository.getTotalDebts(user);
         reportData.put("totalDebts", totalDebts != null ? totalDebts : BigDecimal.ZERO);
 
-        // Fetch achieved and total goals
-        Long achievedGoals = reportRepository.countAchievedGoals(user);
-        Long totalGoals = reportRepository.countTotalGoals(user);
-        reportData.put("achievedGoals", achievedGoals != null ? achievedGoals : 0);
-        reportData.put("totalGoals", totalGoals != null ? totalGoals : 0);
+        // // Fetch achieved and total goals
+        // Long achievedGoals = reportRepository.countAchievedGoals(user);
+        // Long totalGoals = reportRepository.countTotalGoals(user);
+        // reportData.put("achievedGoals", achievedGoals != null ? achievedGoals : 0);
+        // reportData.put("totalGoals", totalGoals != null ? totalGoals : 0);
+
+         // Fetch goals' progress only for the current month
+        if (month == currentMonth) {
+            Long achievedGoals = reportRepository.countAchievedGoals(user);
+            Long totalGoals = reportRepository.countTotalGoals(user);
+            reportData.put("achievedGoals", achievedGoals != null ? achievedGoals : 0);
+            reportData.put("totalGoals", totalGoals != null ? totalGoals : 0);
+        } else {
+            reportData.put("achievedGoals", 0);
+            reportData.put("totalGoals", 0);
+        }
 
         // Calculate net worth
         BigDecimal monthlyAssets = reportRepository.getMonthlyAssets(user, month);
