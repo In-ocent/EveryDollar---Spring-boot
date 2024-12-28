@@ -18,6 +18,5 @@ public interface BudgetRepository extends JpaRepository<BudgetEntity, Long> {
     @Query("SELECT SUM(b.amount) FROM BudgetEntity b WHERE b.user = :user AND MONTH(b.createdAt) = :month AND YEAR(b.createdAt) = :year")
     BigDecimal getTotalIncomeForCurrentMonth(@Param("user") UserEntity user, @Param("month") int month, @Param("year") int year);
 
-
 }
 

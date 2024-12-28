@@ -1,5 +1,6 @@
 document.addEventListener("DOMContentLoaded", () => {
 
+  // Function call to budget api's to get data
   function getExpensesForCurrentMonth() {
     return Promise.all([
       fetch("http://localhost:8080/budget/essential-expenses", { method: "GET" }).then((response) =>
@@ -21,7 +22,7 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   }
 
-    
+  // To get the report for all months
   fetch(`/financial-report/all`)
   .then((response) => {
     if (!response.ok) {
@@ -84,7 +85,8 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   });
 
-  // user image clicking and dropdown
+
+// user image clicking and dropdown
 document.addEventListener("DOMContentLoaded", () => {
   const userImage = document.getElementById("userImage");
   const dropdownMenu = document.getElementById("dropdownMenu");

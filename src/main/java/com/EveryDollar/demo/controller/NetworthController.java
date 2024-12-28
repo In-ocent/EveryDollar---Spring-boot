@@ -84,7 +84,7 @@ public class NetworthController {
         return type.equals("asset") ? "Asset added successfully!" : "Debt added successfully!";
     }
 
-    // Get all assets
+    // Get all assets for current month
     @GetMapping("/current-month-assets")
     @ResponseBody
     public List<NetworthEntity> getCurrentMonthAssets(HttpSession session) {
@@ -95,6 +95,7 @@ public class NetworthController {
         return netWorthService.getCurrentMonthAssets(loggedInUser);
     }
 
+    // Get all debts for current month
     @GetMapping("/current-month-debts")
     @ResponseBody
     public List<NetworthEntity> getCurrentMonthDebts(HttpSession session) {

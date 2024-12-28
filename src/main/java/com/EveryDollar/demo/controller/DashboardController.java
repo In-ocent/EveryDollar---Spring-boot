@@ -26,10 +26,8 @@ public class DashboardController {
     @Autowired
     private DashboardService dashboardService;
 
-
     @GetMapping("/")
     public String renderDashboard(HttpSession session, Model model) {
-        // Get logged-in user details from session
         UserEntity loggedInUser = (UserEntity) session.getAttribute("loggedInUser");
 
         if (loggedInUser != null) {
@@ -47,6 +45,7 @@ public class DashboardController {
             // Fetch dashboard data
             Map<String, Object> dashboardData = dashboardService.getDashboardData(loggedInUser);
             ObjectMapper objectMapper = new ObjectMapper();
+            
             try {
                 String currentMonthAssetDetailsJson = objectMapper.writeValueAsString(dashboardData.get("currentMonthAssetDetails"));
                 String currentMonthDebtDetailsJson = objectMapper.writeValueAsString(dashboardData.get("currentMonthDebtDetails"));
@@ -57,6 +56,7 @@ public class DashboardController {
                 model.addAttribute("currentMonthAssetDetailsJson", "[]");
                 model.addAttribute("currentMonthDebtDetailsJson", "[]");
             }
+            
             model.addAttribute("dashboardData", dashboardData);
 
             return "Dasboard/index";
@@ -65,10 +65,12 @@ public class DashboardController {
         }
     }
 
+    // Endpoint for the main graph for networth , assets and debts
     @GetMapping("/chart-data")
     @ResponseBody
     public Map<String, Object> getChartData(HttpSession session) {
         UserEntity loggedInUser = (UserEntity) session.getAttribute("loggedInUser");
+
         if (loggedInUser == null) {
             throw new RuntimeException("User not logged in");
         }

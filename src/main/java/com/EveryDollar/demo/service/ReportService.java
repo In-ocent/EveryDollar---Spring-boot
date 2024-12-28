@@ -13,7 +13,8 @@ import com.EveryDollar.demo.repository.ReportRepository;
 
 @Service
 public class ReportService {
-     @Autowired
+    
+    @Autowired
     private ReportRepository reportRepository;
 
     /**

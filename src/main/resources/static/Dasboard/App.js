@@ -51,28 +51,30 @@ document.addEventListener("DOMContentLoaded", () => {
   fetchChartData();
 });
 
+
+// To fetch all respective chart data
 function fetchChartData() {
   fetch("/Dashboard/chart-data")
-  .then(response => {
-    if (!response.ok) {
-      throw new Error("Failed to fetch chart data.");
-    }
-    return response.json();
-  })
-  .then(chartDataResponse => {
-    // Update datasets dynamically
-    chartData.netWorth.datasets[0].data = chartDataResponse.netWorthData.map(value => parseFloat(value) || 0);
-    chartData.assets.datasets[0].data = chartDataResponse.assetsData.map(value => parseFloat(value) || 0);
-    chartData.debt.datasets[0].data = chartDataResponse.debtsData.map(value => parseFloat(value) || 0);
+    .then(response => {
+      if (!response.ok) {
+        throw new Error("Failed to fetch chart data.");
+      }
+      return response.json();
+    })
+    .then(chartDataResponse => {
+      // Update datasets dynamically
+      chartData.netWorth.datasets[0].data = chartDataResponse.netWorthData.map(value => parseFloat(value) || 0);
+      chartData.assets.datasets[0].data = chartDataResponse.assetsData.map(value => parseFloat(value) || 0);
+      chartData.debt.datasets[0].data = chartDataResponse.debtsData.map(value => parseFloat(value) || 0);
 
-    // Initialize with Net Worth chart
-    createChart(chartData.netWorth);
-    setActiveButton('btnNetWorth');
-  })
-  .catch(error => {
-    console.error("Error fetching chart data:", error);
-    alert("Failed to load chart data. Please try again later.");
-  });
+      // Initialize with Net Worth chart
+      createChart(chartData.netWorth);
+      setActiveButton('btnNetWorth');
+    })
+    .catch(error => {
+      console.error("Error fetching chart data:", error);
+      alert("Failed to load chart data. Please try again later.");
+    });
 }
 
 document.getElementById('btnNetWorth').addEventListener('click', () => {
@@ -107,6 +109,7 @@ function createChart(data) {
   // Calculate step size dynamically (e.g., 10% of the range or a fixed number)
   const range = maxYValue - minYValue;
   const stepSize = range / 5 || 1; 
+  
   // Recreate chart
   chart = new Chart(ctx, {
     type: 'line',
@@ -125,7 +128,7 @@ function createChart(data) {
           pointRadius: data.datasets[0].pointRadius,
         },
       ],
-// Dynamically updated datasets
+  // Dynamically updated datasets
     },
     options: {
       responsive: true,
@@ -191,12 +194,6 @@ document.getElementById('btnDebt').addEventListener('click', () => {
   setActiveButton('btnDebt');
   createChart(chartData.debt);
 });
-
-// Initialize with Net Worth data
-// createChart(chartData.netWorth);
-// setActiveButton('btnNetWorth');
-
-
 
 
 

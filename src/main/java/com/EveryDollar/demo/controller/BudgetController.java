@@ -18,6 +18,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 
+// To render budget index page with logged in user name and current time
 @Controller
 @RequestMapping("/budget")
 public class BudgetController {
@@ -45,6 +46,7 @@ public class BudgetController {
         }
     }
     
+    // To add an income source 
     @PostMapping("/add")
     @ResponseBody
     public BudgetEntity addIncome(@RequestBody BudgetDTO budgetDTO, HttpSession session) {
@@ -55,6 +57,7 @@ public class BudgetController {
         return budgetService.addIncome(budgetDTO, loggedInUser);
     }
 
+    // To remove an income source by id
     @DeleteMapping("/remove/{id}")
     @ResponseBody
     public String removeIncome(@PathVariable Long id, HttpSession session) {
@@ -71,28 +74,7 @@ public class BudgetController {
         }
     }
 
-    
-
-    // @GetMapping("/total-income")
-    // @ResponseBody
-    // public BigDecimal getTotalIncome(HttpSession session) {
-    //     UserEntity loggedInUser = (UserEntity) session.getAttribute("loggedInUser");
-    //     if (loggedInUser == null) {
-    //         throw new RuntimeException("User not logged in");
-    //     }
-    //     return budgetService.getTotalIncome(loggedInUser);
-    // }
-
-    // @GetMapping("/income-sources")
-    // @ResponseBody
-    // public List<BudgetEntity> getAllIncomeSources(HttpSession session) {
-    //     UserEntity loggedInUser = (UserEntity) session.getAttribute("loggedInUser");
-    //     if (loggedInUser == null) {
-    //         throw new RuntimeException("User not logged in");
-    //     }
-    //     return budgetService.getAllIncomeSources(loggedInUser);
-    // }
-
+    // To display current month income sources 
     @GetMapping("/current-month-income-sources")
     @ResponseBody
     public List<BudgetEntity> getCurrentMonthIncomeSources(HttpSession session) {
@@ -103,6 +85,7 @@ public class BudgetController {
         return budgetService.getCurrentMonthIncomeSources(loggedInUser);
     }
 
+    // To display current month toal income
     @GetMapping("/current-month-total-income")
     @ResponseBody
     public BigDecimal getCurrentMonthTotalIncome(HttpSession session) {
@@ -113,22 +96,23 @@ public class BudgetController {
         return budgetService.getCurrentMonthTotalIncome(loggedInUser);
     }
 
+
     // Essential expense and optional spending data structures implementation
 
     private List<Expense> essentialExpenses = new ArrayList<>();
     
     // Array to store optional spending
-    private Expense[] optionalSpending = new Expense[50]; // Example max size of 100
+    private Expense[] optionalSpending = new Expense[20]; 
     private int optionalSpendingIndex = -1; // Stack pointer for the array
 
-    // Endpoint to get all essential expenses
+    // To get all essential expenses
     @GetMapping("/essential-expenses")
     @ResponseBody
     public List<Expense> getEssentialExpenses() {
         return essentialExpenses;
     }
 
-    // Endpoint to add an essential expense
+    // To add an essential expense
     @PostMapping("/essential-expenses")
     @ResponseBody
     public String addEssentialExpense(@RequestBody Expense expense) {
@@ -136,7 +120,7 @@ public class BudgetController {
         return "Essential expense added successfully!";
     }
 
-    // Endpoint to delete an essential expense
+    // To delete an essential expense by id
     @DeleteMapping("/essential-expenses/{index}")
     @ResponseBody
     public String deleteEssentialExpense(@PathVariable int index) {
@@ -147,21 +131,21 @@ public class BudgetController {
         return "Invalid index!";
     }
 
-    // Endpoint to get all optional spending
+    // To get all optional spending
     @GetMapping("/optional-spending")
     @ResponseBody
     public Expense[] getOptionalSpending() {
         return optionalSpending;
     }
 
-    // Endpoint to add an optional spending item
+    // To add an optional spending item
     @PostMapping("/optional-spending")
     @ResponseBody
     public String addOptionalSpending(@RequestBody Expense expense) {
         return push(expense);
     }
 
-    // Push function to simulate stack behavior
+    // Push function to simulate stack 
     private String push(Expense expense) {
         if (optionalSpendingIndex < optionalSpending.length - 1) {
             optionalSpending[++optionalSpendingIndex] = expense;
@@ -170,13 +154,14 @@ public class BudgetController {
         return "Optional spending array is full!";
     }
 
-    // Endpoint to remove the last optional spending item (stack behavior)
+    // Endpoint to remove the last optional spending item 
     @DeleteMapping("/optional-spending")
     @ResponseBody
     public String removeLastOptionalSpending() {
         return pop();
     }
 
+    // Pop function to remove the last element in array
     private String pop() {
         if (optionalSpendingIndex >= 0) {
             optionalSpending[optionalSpendingIndex--] = null; // Remove the last item
@@ -185,12 +170,11 @@ public class BudgetController {
         return "No items to remove!";
     }
 
-    // Expense class (nested or as a separate file)
+    // Expense class for optional and essenetial expenses
     public static class Expense {
         private String name;
         private double amount;
 
-        // Constructors
         public Expense() {
         }
 
@@ -199,7 +183,6 @@ public class BudgetController {
             this.amount = amount;
         }
 
-        // Getters and setters
         public String getName() {
             return name;
         }
@@ -219,7 +202,6 @@ public class BudgetController {
         @Override
         public String toString() {
             return "Expense{name='" + name + "', amount=" + amount + "}";
-}
+        }
     }
-    
 }

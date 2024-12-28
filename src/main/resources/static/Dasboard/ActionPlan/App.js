@@ -18,7 +18,7 @@ function fetchGoals() {
         });
 }
 
-// Add a new goal
+// Function to Add a new goal
 function addGoal() {
     const name = document.getElementById('goal-name').value.trim();
     const date = document.getElementById('goal-date').value;
@@ -37,6 +37,7 @@ function addGoal() {
         progressValue: progressValue,
     };
 
+    // Api call for adding goals
     fetch("http://localhost:8080/goals/add", {
         method: "POST",
         headers: {
@@ -44,21 +45,21 @@ function addGoal() {
         },
         body: JSON.stringify(payload),
     })
-        .then((response) => {
-            if (!response.ok) {
-                throw new Error("Failed to add goal");
-            }
-            return response.text();
-        })
-        .then((message) => {
-            alert(message);
-            fetchGoals(); // Refresh the list after adding
-            clearAddGoalFields();
-        })
-        .catch((error) => {
-            console.error("Error adding goal:", error);
-            alert("Error: " + error.message);
-        });
+    .then((response) => {
+        if (!response.ok) {
+            throw new Error("Failed to add goal");
+        }
+        return response.text();
+    })
+    .then((message) => {
+        alert(message);
+        fetchGoals(); // Refresh the list after adding
+        clearAddGoalFields();
+    })
+    .catch((error) => {
+        console.error("Error adding goal:", error);
+        alert("Error: " + error.message);
+    });
 }
 
 // Update progress of an existing goal
@@ -83,21 +84,21 @@ function updateProgress() {
         },
         body: JSON.stringify(payload),
     })
-        .then((response) => {
-            if (!response.ok) {
-                throw new Error("Failed to update progress");
-            }
-            return response.text();
-        })
-        .then((message) => {
-            alert(message);
-            fetchGoals(); // Refresh the list after updating
-            clearUpdateProgressFields();
-        })
-        .catch((error) => {
-            console.error("Error updating progress:", error);
-            alert("Error: " + error.message);
-        });
+    .then((response) => {
+        if (!response.ok) {
+            throw new Error("Failed to update progress");
+        }
+        return response.text();
+    })
+    .then((message) => {
+        alert(message);
+        fetchGoals(); // Refresh the list after updating
+        clearUpdateProgressFields();
+    })
+    .catch((error) => {
+        console.error("Error updating progress:", error);
+        alert("Error: " + error.message);
+    });
 }
 
 // Render the goals in the list and graph
@@ -150,20 +151,20 @@ function deleteGoal(name) {
             "Content-Type": "application/json",
         },
     })
-        .then((response) => {
-            if (!response.ok) {
-                throw new Error("Failed to delete goal");
-            }
-            return response.text();
-        })
-        .then((message) => {
-            alert(message);
-            fetchGoals(); // Refresh the list after deletion
-        })
-        .catch((error) => {
-            console.error("Error deleting goal:", error);
-            alert("Error: " + error.message);
-        });
+    .then((response) => {
+        if (!response.ok) {
+            throw new Error("Failed to delete goal");
+        }
+        return response.text();
+    })
+    .then((message) => {
+        alert(message);
+        fetchGoals(); // Refresh the list after deletion
+    })
+    .catch((error) => {
+        console.error("Error deleting goal:", error);
+        alert("Error: " + error.message);
+    });
 }
 
 

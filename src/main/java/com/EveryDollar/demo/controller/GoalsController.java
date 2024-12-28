@@ -46,7 +46,7 @@ class GoalsRender {
             model.addAttribute("currentDay", currentDay.name()); // E.g., "WEDNESDAY"
             model.addAttribute("currentDate", currentDate.format(formatter)); // E.g., "February 22, 2023"
             
-            return "ActionPlan/index"; // Ensure the correct template name
+            return "ActionPlan/index"; 
         } else {
             return "redirect:/User_login/login.html"; // Redirect to login page if session is invalid
         }
@@ -105,7 +105,7 @@ public class GoalsController {
         return "Goal progress updated successfully!";
     }
 
-    // Get all goals for the logged-in user
+    // Get all current month goals for the logged-in user
     @GetMapping
     @ResponseBody
     public List<GoalsEntity> getCurrentMonthGoals(HttpSession session) {
@@ -122,7 +122,6 @@ class ProgressUpdateRequest {
     private String name;
     private int progressValue;
 
-    // Getters and Setters
     public String getName() {
         return name;
     }

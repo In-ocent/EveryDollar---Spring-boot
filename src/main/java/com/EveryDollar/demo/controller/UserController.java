@@ -22,8 +22,6 @@ import com.EveryDollar.demo.service.UserService;
 
 import jakarta.servlet.http.HttpSession;
 
-// import org.springframework.web.bind.annotation.CrossOrigin;
-
 @Controller
 @RequestMapping("/My-account")
 class Render {
@@ -55,7 +53,6 @@ class Render {
 
 @RestController
 @RequestMapping("/user")
-// @CrossOrigin(origins = {"http://127.0.0.1:5501", "http://localhost:5501"}, allowCredentials = "true")
 public class UserController {
 
     @Autowired
