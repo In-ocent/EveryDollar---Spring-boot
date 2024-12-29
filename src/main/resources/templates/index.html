@@ -5,37 +5,144 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Every Dollar</title>
     <link rel="stylesheet" href="/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css" integrity="sha512-Kc323vGBEqzTmouAECnVceyQqyqdsSiqLQISBL29aUW4U/M7pSPA/gEUZQqv1cwx4OnYxTxve5UMg5GT6L4JJg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
 </head>
 <body>
     <header>
-        <div class="logo">
-            <a href="/index.html">
+        <div class="header">
+          <div class="logo">
+            <a href="/">
               <img src="/assets/logo.png" alt="Logo">
             </a>
           </div>
         <nav>
           <ul>
-            <li><a href="#learn">Learn to Budget</a></li>
-            <li><a href="#features">Features</a></li>
-            <li><a href="#gift">Gift</a></li>
+           
+            <li><a href="/features/index.html">Features</a></li>
+            
           </ul>
           <!-- <button class="signup-btn" >Sign Up</button> -->
-          <a href="User_login/login.html"><button class="signup-btn">Login</button></a>
+          <a href="/User_login/login.html"><button class="signup-btn">Login</button></a>
         </nav>
+        </div>
       </header>
     
       <main>
-        <section class="hero">
+         <section class="hero">
           <div class="hero-content">
-            <h1>Budgeting Meets Simplicity</h1>
+            <h1>Budgeting Meets&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Simplicity</h1>
             <p>The easy-to-use zero-based budgeting app that helps you keep tabs on your money at a glance—anytime, anywhere.</p>
-            <a href="User_register/register.html"><button class="create-account-btn">Create Your Free Account</button></a>
+            <a href="/User_register/register.html"><button class="create-account-btn">Create Your Free Account</button></a>
           </div>
           <div class="hero-image">
               <img src="/assets/hero-image.png" alt="Virginia A.">
           </div>
-        </section>
+        </section> 
+
+         <div class="mid-bar">
+          <img src="/assets/desktop-testimonials-header.png" alt="">
+        </div>
+
+        <div class="section">
+          <img src="/assets/features-image-1-desktop.png" alt="Track Your Budget">
+          <div class="text">
+              <h2>About Us</h2>
+              <p>EveryDollar is more than just a website; it’s your go-to destination for simplifying budgeting and managing your finances. Our platform is built to make budgeting easy and intuitive, helping you allocate every dollar intentionally. Whether you're planning savings, tracking expenses, or working toward financial independence, EveryDollar offers the tools and resources you need to stay in control of your money. Trusted by individuals and families worldwide, we are dedicated to helping you achieve your financial goals with clarity and confidence.</p>
+          </div>
+      </div> 
+
+      <div class="mid-bar-2">
+        <img src="/assets/image-2.png" alt="">
+      </div>
+
+      <div class="image">
+        <img src="/assets/image-3.png" alt="">
+      </div>
+
+      <section class="testimonial-section">
+        <div class="testimonial-header">
+          <h1>We love our users! Here's why they love Us:</h1>
+        </div>
+    
+        <div class="testimonial-slider">
+          <!-- Testimonial 1 -->
+          <div class="testimonial-card">
+            <h3>⭐⭐⭐⭐⭐</h3>
+            <h2>Simple to use yet so helpful</h2>
+            <p>
+              It has really helped us visualize our spending which in return helps us manage it better.
+              A quick and convenient way to see a snapshot of what to expect for the month.
+            </p>
+            <span>- Holly B.</span>
+          </div>
+    
+          <!-- Testimonial 2 -->
+          <div class="testimonial-card">
+            <h3>⭐⭐⭐⭐⭐</h3>
+            <h2>I use this app all the time</h2>
+            <p>
+              I have been using this app since it launched. It replaced other apps I had used, 
+              and there has been no going back.
+            </p>
+            <span>- big_dan_</span>
+          </div>
+    
+          <!-- Testimonial 3 -->
+          <div class="testimonial-card">
+            <h3>⭐⭐⭐⭐⭐</h3>
+            <h2>Easy to use</h2>
+            <p>
+              Connect it with your bank, and all your transactions drop right in.
+              Makes budgeting easy (and actually kind of fun)!
+            </p>
+            <span>- Kim</span>
+          </div>
+        </div>
+    
+        <!-- Slider Dots -->
+        <div class="slider-dots">
+          <span class="dot active" onclick="currentSlide(1)"></span>
+          <span class="dot active" onclick="currentSlide(2)"></span>
+          <span class="dot active" onclick="currentSlide(3)"></span>
+        </div>
+      </section>
+
       </main>
+      <footer>
+        <div class="footer-container">
+          <!-- Logo Section -->
+          <div class="footer-logo">
+            <a href="/">
+              <img src="/assets/logo.png" alt="Logo">
+            </a>
+          </div>
+          
+          <!-- Social Media Links -->
+          <div class="social-links">
+            <a href="https://www.linkedin.com" target="_blank"><i class="fa-brands fa-linkedin"></i> Linkedin</a>
+            <a href="https://www.twitter.com" target="_blank"><i class="fa-brands fa-twitter"></i> Twitter</a>
+            <a href="https://www.instagram.com" target="_blank"><i class="fa-brands fa-instagram"></i> Instagram</a>
+            <a href="https://www.whatsapp.com" target="_blank"><i class="fa-brands fa-whatsapp"></i> Whatsapp</a>
+            <a href="https://www.facebook.com" target="_blank"><i class="fa-brands fa-facebook"></i>Facebook</a>
+            <a href="mailto:your_email@example.com"><i class="fa-solid fa-envelope"></i> Email</a>
+          </div>
+          
+          <!-- Footer Links -->
+          <div class="footer-links">
+            <span>About Us</span>
+            <span>Privacy Policy</span>
+            <span>Terms of Service</span>
+            <span>Contact</span>
+        </div>
+        
+          
+      </footer>
+      <!-- Copyright Section -->
+      <div class="footer-bottom">
+        <p>&copy; 2024 Every Dollar. All rights reserved.</p>
+      </div>
+    </div>
+      
     <script src="/app.js"></script>
 </body>
 </html>

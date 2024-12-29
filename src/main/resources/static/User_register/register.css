@@ -4,15 +4,16 @@ body {
     align-items: center;
     justify-content: center;
     font-family: Arial, sans-serif;
-    background-color: #f0f0f0;
+    background-color: #e6edf5;
 }
 .registration-form {
-    background-color: #fff;
+    background-color: #d9e5f2;;
     padding: 20px;
-    border-radius: 5px;
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-    max-width: 400px;
+    border-radius: 10px;
+    box-shadow: 0px 10px 15px -5px rgba(0, 0, 0, 0.5);
+    max-width: 700px;
     margin: 0 auto;
+    width: 600px;
 }
 
 .registration-form h2 {
@@ -23,6 +24,7 @@ body {
 .registration-form p {
     text-align: center;
     margin-bottom: 20px;
+    font-size: 14px;
 }
 
 .registration-form label {
@@ -35,7 +37,8 @@ body {
     padding: 10px;
     margin-bottom: 10px;
     border: 1px solid #ccc;
-    border-radius: 3px;
+    border-radius: 10px;
+    box-shadow: 0px 10px 15px -5px rgba(0, 0, 0, 0.5);
 }
 
 .registration-form button {
@@ -43,8 +46,12 @@ body {
     color: #fff;
     border: none;
     padding: 10px 20px;
-    border-radius: 3px;
+    border-radius: 10px;
     cursor: pointer;
+    margin-left: 240px;
+    box-shadow: 0px 10px 15px -5px rgba(0, 0, 0, 0.5);
+    margin-top: 10px;
+    font-weight: bold;
 }
 
 .registration-form a {

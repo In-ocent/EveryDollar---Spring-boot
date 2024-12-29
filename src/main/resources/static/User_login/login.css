@@ -4,26 +4,33 @@ body {
     align-items: center;
     justify-content: center;
     font-family: Arial, sans-serif;
-    background-color: #f0f0f0;
+    background-color: #e6edf5;
 }
 
 .login-form {
-    background-color: #fff;
+    background-color: #d9e5f2;
     padding: 20px;
-    border-radius: 5px;
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-    max-width: 400px;
+    border-radius: 10px;
+    box-shadow: 0px 10px 15px -5px rgba(0, 0, 0, 0.5);
+    max-width: 700px;
     margin: 0 auto;
+    width: 600px;
 }
 
 .login-form h2 {
     text-align: center;
     margin-bottom: 20px;
-}
+    color: black;
+    /* background-color: #009dff;
+    border-radius: 8px;
+    padding: 10px;*/
+   
+} 
 
 .login-form p {
     text-align: center;
     margin-bottom: 20px;
+    font-size: 14px;
 }
 
 .login-form label {
@@ -36,26 +43,32 @@ body {
     padding: 10px;
     margin-bottom: 10px;
     border: 1px solid #ccc;
-    border-radius: 3px;
+    border-radius: 10px;
+    box-shadow: 0px 10px 15px -5px rgba(0, 0, 0, 0.5);
 }
 
 .login-form button {
-    width: 100%;
+    width: 20%;
     /* padding: 10px; */
     margin-bottom: 10px;
-    background-color: #007bff; /* Blue color */
+    background-color: #0073b9; /* Blue color */
     color: #fff; /* White text color */
     border: none;
     padding: 10px 20px;
-    border-radius: 5px;
+    border-radius: 10px;
     cursor: pointer; 
     font-size: 16px; /* Adjust font size as needed */
     font-weight: bold;
+    align-items: center;
+    justify-content: center;
+    margin-left: 240px;
+    box-shadow: 0px 10px 15px -5px rgba(0, 0, 0, 0.5);
+    margin-top: 10px;
 }
 
 .login-form a {
     text-decoration: none;
-    color: #007bff;
+    color: #0073b9;
 }
 
 #loginForm {
