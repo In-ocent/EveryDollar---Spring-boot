@@ -31,18 +31,15 @@ public class DashboardController {
         UserEntity loggedInUser = (UserEntity) session.getAttribute("loggedInUser");
 
         if (loggedInUser != null) {
-            // Add user data to the model
             model.addAttribute("username", loggedInUser.getUsername());
 
             LocalDate currentDate = LocalDate.now();
             DayOfWeek currentDay = currentDate.getDayOfWeek();
             DateTimeFormatter formatter = DateTimeFormatter.ofPattern("MMMM dd, yyyy", Locale.ENGLISH);
 
-            // Add day and date to the model
             model.addAttribute("currentDay", currentDay.name());
             model.addAttribute("currentDate", currentDate.format(formatter));
 
-            // Fetch dashboard data
             Map<String, Object> dashboardData = dashboardService.getDashboardData(loggedInUser);
             ObjectMapper objectMapper = new ObjectMapper();
             
@@ -61,11 +58,10 @@ public class DashboardController {
 
             return "Dasboard/index";
         } else {
-            return "redirect:/User_login/login.html"; // Redirect to login page if session is invalid
+            return "redirect:/User_login/login.html"; 
         }
     }
 
-    // Endpoint for the main graph for networth , assets and debts
     @GetMapping("/chart-data")
     @ResponseBody
     public Map<String, Object> getChartData(HttpSession session) {

@@ -31,24 +31,21 @@ import jakarta.servlet.http.HttpSession;
 class GoalsRender {
     @GetMapping("/")
     public String renderGoals(HttpSession session, Model model) {
-        // Get logged-in user details from session
         UserEntity loggedInUser = (UserEntity) session.getAttribute("loggedInUser");
 
         if (loggedInUser != null) {
-            // Add user data to the model
             model.addAttribute("username", loggedInUser.getUsername());
 
             LocalDate currentDate = LocalDate.now();
             DayOfWeek currentDay = currentDate.getDayOfWeek();
             DateTimeFormatter formatter = DateTimeFormatter.ofPattern("MMMM dd, yyyy", Locale.ENGLISH);
 
-            // Add day and date to the model
-            model.addAttribute("currentDay", currentDay.name()); // E.g., "WEDNESDAY"
-            model.addAttribute("currentDate", currentDate.format(formatter)); // E.g., "February 22, 2023"
+            model.addAttribute("currentDay", currentDay.name()); 
+            model.addAttribute("currentDate", currentDate.format(formatter)); 
             
             return "ActionPlan/index"; 
         } else {
-            return "redirect:/User_login/login.html"; // Redirect to login page if session is invalid
+            return "redirect:/User_login/login.html"; 
         }
     }
 }
@@ -60,7 +57,6 @@ public class GoalsController {
     @Autowired
     private GoalsService goalsService;
 
-    // Add a new goal
     @PostMapping("/add")
     @ResponseBody
     public String addGoal(@RequestBody GoalsRequest request, HttpSession session) {
@@ -92,7 +88,6 @@ public class GoalsController {
     }
 
 
-    // Update progress of a goal
     @PutMapping("/update")
     @ResponseBody
     public String updateGoalProgress(@RequestBody ProgressUpdateRequest request, HttpSession session) {
@@ -105,7 +100,6 @@ public class GoalsController {
         return "Goal progress updated successfully!";
     }
 
-    // Get all current month goals for the logged-in user
     @GetMapping
     @ResponseBody
     public List<GoalsEntity> getCurrentMonthGoals(HttpSession session) {

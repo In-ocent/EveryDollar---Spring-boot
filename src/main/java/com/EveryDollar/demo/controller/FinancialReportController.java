@@ -21,7 +21,6 @@ import com.EveryDollar.demo.service.ReportService;
 
 import jakarta.servlet.http.HttpSession;
 
-// To render the report template with logged in user name and date 
 @Controller
 @RequestMapping("/Report")
 class ReportController {
@@ -30,16 +29,14 @@ class ReportController {
         UserEntity loggedInUser = (UserEntity) session.getAttribute("loggedInUser");
 
         if (loggedInUser != null) {
-            // Add user data to the model
             model.addAttribute("username", loggedInUser.getUsername());
 
             LocalDate currentDate = LocalDate.now();
             DayOfWeek currentDay = currentDate.getDayOfWeek();
             DateTimeFormatter formatter = DateTimeFormatter.ofPattern("MMMM dd, yyyy", Locale.ENGLISH);
 
-            // Add day and date to the model
-            model.addAttribute("currentDay", currentDay.name()); // E.g., "WEDNESDAY"
-            model.addAttribute("currentDate", currentDate.format(formatter)); // E.g., "February 22, 2023"
+            model.addAttribute("currentDay", currentDay.name()); 
+            model.addAttribute("currentDate", currentDate.format(formatter)); 
             
             return "FinancialReport/index"; 
         } else {
@@ -48,7 +45,6 @@ class ReportController {
     }
 }
 
-// To display 12 months report 
 @RestController
 @RequestMapping("/financial-report")
 public class FinancialReportController {

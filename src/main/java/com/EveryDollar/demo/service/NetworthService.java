@@ -35,7 +35,7 @@ public class NetworthService {
         entry.setValue(value);
         entry.setType(type);
         entry.setUser(user);
-        entry.setCreatedAt(LocalDateTime.now()); // Set createdAt field
+        entry.setCreatedAt(LocalDateTime.now()); 
         return networthRepository.save(entry);
     }
 

@@ -1,7 +1,6 @@
 const goalList = document.getElementById('goal-list');
 const graph = document.getElementById('graph');
 
-// Fetch all goals from the backend
 function fetchGoals() {
     fetch("http://localhost:8080/goals", {
         method: "GET",
@@ -18,7 +17,6 @@ function fetchGoals() {
         });
 }
 
-// Function to Add a new goal
 function addGoal() {
     const name = document.getElementById('goal-name').value.trim();
     const date = document.getElementById('goal-date').value;
@@ -37,7 +35,6 @@ function addGoal() {
         progressValue: progressValue,
     };
 
-    // Api call for adding goals
     fetch("http://localhost:8080/goals/add", {
         method: "POST",
         headers: {
@@ -53,7 +50,7 @@ function addGoal() {
     })
     .then((message) => {
         alert(message);
-        fetchGoals(); // Refresh the list after adding
+        fetchGoals(); 
         clearAddGoalFields();
     })
     .catch((error) => {
@@ -62,7 +59,6 @@ function addGoal() {
     });
 }
 
-// Update progress of an existing goal
 function updateProgress() {
     const name = document.getElementById('update-goal-name').value.trim();
     const newProgressValue = parseInt(document.getElementById('update-progress-value').value);
@@ -92,7 +88,7 @@ function updateProgress() {
     })
     .then((message) => {
         alert(message);
-        fetchGoals(); // Refresh the list after updating
+        fetchGoals(); 
         clearUpdateProgressFields();
     })
     .catch((error) => {
@@ -101,7 +97,6 @@ function updateProgress() {
     });
 }
 
-// Render the goals in the list and graph
 function renderGoals(goals) {
     goalList.innerHTML = '';
     graph.innerHTML = '';
@@ -112,7 +107,6 @@ function renderGoals(goals) {
         const goalElement = document.createElement('div');
         goalElement.className = 'goal';
 
-        // Adding the delete button with onclick event
         goalElement.innerHTML = `
             <div class="goal-info">
                 <h3>${goal.name}</h3>
@@ -159,7 +153,7 @@ function deleteGoal(name) {
     })
     .then((message) => {
         alert(message);
-        fetchGoals(); // Refresh the list after deletion
+        fetchGoals(); 
     })
     .catch((error) => {
         console.error("Error deleting goal:", error);
@@ -168,7 +162,6 @@ function deleteGoal(name) {
 }
 
 
-// Clear input fields after adding a goal
 function clearAddGoalFields() {
     document.getElementById('goal-name').value = '';
     document.getElementById('goal-date').value = '';
@@ -176,35 +169,30 @@ function clearAddGoalFields() {
     document.getElementById('goal-progress').value = '';
 }
 
-// Clear input fields after updating progress
 function clearUpdateProgressFields() {
     document.getElementById('update-goal-name').value = '';
     document.getElementById('update-progress-value').value = '';
 }
 
-// Initialize the page by fetching all goals
 document.addEventListener("DOMContentLoaded", fetchGoals);
 
 document.addEventListener("DOMContentLoaded", () => {
     const userImage = document.getElementById("userImage");
     const dropdownMenu = document.getElementById("dropdownMenu");
   
-    // Toggle dropdown visibility on image click
     userImage.addEventListener("click", (event) => {
-      event.stopPropagation(); // Prevent triggering outside click event
+      event.stopPropagation(); 
       dropdownMenu.style.display =
         dropdownMenu.style.display === "block" ? "none" : "block";
     });
   
-    // Close dropdown if clicked outside
     document.addEventListener("click", () => {
       dropdownMenu.style.display = "none";
     });
   
-    // Logout button functionality
     const logoutButton = document.getElementById("logoutButton");
     logoutButton.addEventListener("click", () => {
       alert("Logged out!");
-      window.location.href = "/User_login/login.html"; // Adjust redirection path if needed
+      window.location.href = "/User_login/login.html"; 
     });
   });

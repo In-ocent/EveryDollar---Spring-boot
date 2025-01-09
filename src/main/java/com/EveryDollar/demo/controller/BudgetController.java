@@ -2,6 +2,7 @@ package com.EveryDollar.demo.controller;
 
 import com.EveryDollar.demo.dto.BudgetDTO;
 import com.EveryDollar.demo.entity.BudgetEntity;
+import com.EveryDollar.demo.entity.EssentialExpensesEntity;
 import com.EveryDollar.demo.entity.UserEntity;
 import com.EveryDollar.demo.service.BudgetService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,11 +15,10 @@ import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.DayOfWeek;
 import java.time.format.DateTimeFormatter;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
+import java.util.Map;
 
-// To render budget index page with logged in user name and current time
 @Controller
 @RequestMapping("/budget")
 public class BudgetController {
@@ -46,7 +46,6 @@ public class BudgetController {
         }
     }
     
-    // To add an income source 
     @PostMapping("/add")
     @ResponseBody
     public BudgetEntity addIncome(@RequestBody BudgetDTO budgetDTO, HttpSession session) {
@@ -57,7 +56,6 @@ public class BudgetController {
         return budgetService.addIncome(budgetDTO, loggedInUser);
     }
 
-    // To remove an income source by id
     @DeleteMapping("/remove/{id}")
     @ResponseBody
     public String removeIncome(@PathVariable Long id, HttpSession session) {
@@ -74,7 +72,6 @@ public class BudgetController {
         }
     }
 
-    // To display current month income sources 
     @GetMapping("/current-month-income-sources")
     @ResponseBody
     public List<BudgetEntity> getCurrentMonthIncomeSources(HttpSession session) {
@@ -85,7 +82,6 @@ public class BudgetController {
         return budgetService.getCurrentMonthIncomeSources(loggedInUser);
     }
 
-    // To display current month toal income
     @GetMapping("/current-month-total-income")
     @ResponseBody
     public BigDecimal getCurrentMonthTotalIncome(HttpSession session) {
@@ -97,55 +93,63 @@ public class BudgetController {
     }
 
 
-    // Essential expense and optional spending data structures implementation
-
-    private List<Expense> essentialExpenses = new ArrayList<>();
-    
-    // Array to store optional spending
-    private Expense[] optionalSpending = new Expense[20]; 
-    private int optionalSpendingIndex = -1; // Stack pointer for the array
-
-    // To get all essential expenses
     @GetMapping("/essential-expenses")
     @ResponseBody
-    public List<Expense> getEssentialExpenses() {
-        return essentialExpenses;
+    public List<EssentialExpensesEntity> getEssentialExpenses(HttpSession session) {
+        UserEntity loggedInUser = (UserEntity) session.getAttribute("loggedInUser");
+
+        if (loggedInUser == null) {
+            throw new RuntimeException("User not logged in");
+        }
+
+        budgetService.loadEssentialExpensesFromDatabase(loggedInUser);
+        return budgetService.getEssentialExpenses();
     }
 
-    // To add an essential expense
     @PostMapping("/essential-expenses")
     @ResponseBody
-    public String addEssentialExpense(@RequestBody Expense expense) {
-        essentialExpenses.add(expense);
-        return "Essential expense added successfully!";
-    }
+    public String addEssentialExpense(@RequestBody Map<String, Object> expenseData, HttpSession session) {
+        UserEntity loggedInUser = (UserEntity) session.getAttribute("loggedInUser");
 
-    // To delete an essential expense by id
-    @DeleteMapping("/essential-expenses/{index}")
-    @ResponseBody
-    public String deleteEssentialExpense(@PathVariable int index) {
-        if (index >= 0 && index < essentialExpenses.size()) {
-            essentialExpenses.remove(index);
-            return "Essential expense removed successfully!";
+        if (loggedInUser == null) {
+            throw new RuntimeException("User not logged in");
         }
-        return "Invalid index!";
+
+        String name = (String) expenseData.get("name");
+        BigDecimal amount = new BigDecimal(expenseData.get("amount").toString());
+
+        return budgetService.addEssentialExpense(name, amount, loggedInUser);
     }
 
-    // To get all optional spending
+    @DeleteMapping("/essential-expenses/{id}")
+    @ResponseBody
+    public String deleteEssentialExpense(@PathVariable Long id, HttpSession session) {
+        UserEntity loggedInUser = (UserEntity) session.getAttribute("loggedInUser");
+
+        if (loggedInUser == null) {
+            throw new RuntimeException("User not logged in");
+        }
+
+        return budgetService.deleteEssentialExpense(id, loggedInUser);
+    }
+
+
+
+    private Expense[] optionalSpending = new Expense[20]; 
+    private int optionalSpendingIndex = -1; 
+
     @GetMapping("/optional-spending")
     @ResponseBody
     public Expense[] getOptionalSpending() {
         return optionalSpending;
     }
 
-    // To add an optional spending item
     @PostMapping("/optional-spending")
     @ResponseBody
     public String addOptionalSpending(@RequestBody Expense expense) {
         return push(expense);
     }
 
-    // Push function to simulate stack 
     private String push(Expense expense) {
         if (optionalSpendingIndex < optionalSpending.length - 1) {
             optionalSpending[++optionalSpendingIndex] = expense;
@@ -154,23 +158,20 @@ public class BudgetController {
         return "Optional spending array is full!";
     }
 
-    // Endpoint to remove the last optional spending item 
     @DeleteMapping("/optional-spending")
     @ResponseBody
     public String removeLastOptionalSpending() {
         return pop();
     }
 
-    // Pop function to remove the last element in array
     private String pop() {
         if (optionalSpendingIndex >= 0) {
-            optionalSpending[optionalSpendingIndex--] = null; // Remove the last item
+            optionalSpending[optionalSpendingIndex--] = null; 
             return "Last optional spending item removed successfully!";
         }
         return "No items to remove!";
     }
 
-    // Expense class for optional and essenetial expenses
     public static class Expense {
         private String name;
         private double amount;

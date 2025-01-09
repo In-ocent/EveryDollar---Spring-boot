@@ -1,6 +1,5 @@
 document.addEventListener("DOMContentLoaded", () => {
 
-  // Function call to budget api's to get data
   function getExpensesForCurrentMonth() {
     return Promise.all([
       fetch("http://localhost:8080/budget/essential-expenses", { method: "GET" }).then((response) =>
@@ -22,7 +21,6 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   }
 
-  // To get the report for all months
   fetch(`/financial-report/all`)
   .then((response) => {
     if (!response.ok) {
@@ -31,13 +29,12 @@ document.addEventListener("DOMContentLoaded", () => {
     return response.json();
   })
   .then(async (allData) => {
-    const tableBody = document.querySelector("table tbody"); // Select the table body
+    const tableBody = document.querySelector("table tbody"); 
 
     for (const data of allData) {
       const row = document.createElement("tr");
 
-      if (data.month.toLowerCase() === "december") {
-        // Fetch current month expenses for December
+      if (data.month.toLowerCase() === "january") {
         const expenses = await getExpensesForCurrentMonth();
         row.innerHTML = `
           <td>${data.month}</td>
@@ -49,7 +46,6 @@ document.addEventListener("DOMContentLoaded", () => {
           <td>${data.achievedGoals} / ${data.totalGoals}</td>
         `;
       } else {
-        // Render other months as-is
         row.innerHTML = `
           <td>${data.month}</td>
           <td>$${data.monthlyIncome.toFixed(2)}</td>
@@ -70,9 +66,8 @@ document.addEventListener("DOMContentLoaded", () => {
   });
 
   
-    // Download Report (using a library like jsPDF or server-generated PDF)
     document.getElementById("downloadReport").addEventListener("click", () => {
-        const reportElement = document.querySelector(".report"); // Target the report div
+        const reportElement = document.querySelector(".report"); 
         const options = {
             margin: 1,
             filename: `Financial_Report_Month.pdf`,
@@ -86,28 +81,24 @@ document.addEventListener("DOMContentLoaded", () => {
   });
 
 
-// user image clicking and dropdown
 document.addEventListener("DOMContentLoaded", () => {
   const userImage = document.getElementById("userImage");
   const dropdownMenu = document.getElementById("dropdownMenu");
 
-  // Toggle dropdown visibility on image click
   userImage.addEventListener("click", (event) => {
-    event.stopPropagation(); // Prevent triggering outside click event
+    event.stopPropagation(); 
     dropdownMenu.style.display =
       dropdownMenu.style.display === "block" ? "none" : "block";
   });
 
-  // Close dropdown if clicked outside
   document.addEventListener("click", () => {
     dropdownMenu.style.display = "none";
   });
 
-  // Logout button functionality
   const logoutButton = document.getElementById("logoutButton");
   logoutButton.addEventListener("click", () => {
     alert("Logged out!");
-    window.location.href = "/User_login/login.html"; // Adjust redirection path if needed
+    window.location.href = "/User_login/login.html"; 
   });
 });
 

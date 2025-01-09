@@ -26,7 +26,7 @@ public class NetworthEntity {
     private BigDecimal value;
 
     @Column(nullable = false)
-    private String type; // "asset" or "debt"
+    private String type; 
 
     @ManyToOne
     @JoinColumn(name = "user_id", nullable = false)
@@ -41,7 +41,6 @@ public class NetworthEntity {
     public void setCreatedAt(LocalDateTime createdAt) {
         this.createdAt = createdAt;
     }
-    // Getters and setters
     public Long getId() { return id; }
     public void setId(Long id) { this.id = id; }
 

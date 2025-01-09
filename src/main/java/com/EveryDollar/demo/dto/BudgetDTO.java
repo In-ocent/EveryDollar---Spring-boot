@@ -7,7 +7,6 @@ public class BudgetDTO {
     private String sourceName;
     private BigDecimal amount;
 
-    // Getters and Setters
     public String getSourceName() {
         return sourceName;
     }

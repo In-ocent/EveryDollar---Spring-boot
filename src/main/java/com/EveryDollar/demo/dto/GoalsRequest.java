@@ -8,7 +8,6 @@ public class GoalsRequest {
     private int targetValue;
     private int progressValue;
 
-    // Getters and Setters
     public String getName() {
         return name;
     }

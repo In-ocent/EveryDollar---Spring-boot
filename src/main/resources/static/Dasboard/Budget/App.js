@@ -1,7 +1,6 @@
-let totalIncome = 0; // Tracks total income
-let incomeSources = []; // Stores all income sources
+let totalIncome = 0; 
+let incomeSources = []; 
 
-// Function to fetch current month total income from the backend
 function fetchTotalIncome() {
     fetch("http://localhost:8080/budget/current-month-total-income", {
         method: "GET",
@@ -26,7 +25,6 @@ function fetchTotalIncome() {
 }
 
 
-// Function to fetch current month income sources
 function fetchIncomeSources() {
     fetch("http://localhost:8080/budget/current-month-income-sources", {
         method: "GET",
@@ -42,7 +40,7 @@ function fetchIncomeSources() {
     })
     .then((data) => {
         const incomeList = document.getElementById("income-list");
-        incomeList.innerHTML = ""; // Clear the list
+        incomeList.innerHTML = ""; 
 
         data.forEach((source) => {
             const incomeItem = document.createElement("div");
@@ -61,7 +59,6 @@ function fetchIncomeSources() {
 }
 
 
-// Function to add income
 function addIncome() {
     const incomeNameInput = document.getElementById("income-name");
     const incomeAmountInput = document.getElementById("income-amount");
@@ -79,7 +76,6 @@ function addIncome() {
         amount: incomeAmount,
     };
 
-    // Send the income data to the backend
     fetch("http://localhost:8080/budget/add", {
         method: "POST",
         headers: {
@@ -98,11 +94,9 @@ function addIncome() {
         fetchTotalIncome();
         fetchIncomeSources();
 
-        // Clear input fields
         incomeNameInput.value = "";
         incomeAmountInput.value = "";
 
-        // Hide input fields and reset buttons
         document.getElementById("input-fields-container").classList.add("hidden");
         document.getElementById("save-income-btn").classList.add("hidden");
         document.getElementById("add-item-btn").classList.remove("hidden");
@@ -114,7 +108,6 @@ function addIncome() {
 }
 
 
-// function to remove income
 function removeIncome(id, button) {
     fetch(`http://localhost:8080/budget/remove/${id}`, {
         method: "DELETE",
@@ -128,11 +121,9 @@ function removeIncome(id, button) {
     .then((message) => {
         alert(message);
 
-        // Remove the income item from the UI
         const incomeItem = button.parentElement;
         incomeItem.remove();
 
-        // Refresh total income and income list
         fetchTotalIncome();
     })
     .catch((error) => {
@@ -142,14 +133,12 @@ function removeIncome(id, button) {
 }
 
 
-// Function to toggle input fields visibility
 function toggleInputFields() {
     document.getElementById("input-fields-container").classList.remove("hidden");
     document.getElementById("save-income-btn").classList.remove("hidden");
     document.getElementById("add-item-btn").classList.add("hidden");
 }
 
-// Initialize the page by fetching data
 function initializePage() {
     fetchTotalIncome();
     fetchIncomeSources();
@@ -158,16 +147,14 @@ function initializePage() {
     updateTotalBudget();
 }
 
-// Event listener for page load
 document.addEventListener("DOMContentLoaded", initializePage);
 
-// Logout button functionality
 document.addEventListener("DOMContentLoaded", () => {
     const logoutButton = document.getElementById("logoutButton");
     if (logoutButton) {
         logoutButton.addEventListener("click", () => {
             alert("Logged out!");
-            window.location.href = "/User_login/login.html"; // Adjust redirection path if needed
+            window.location.href = "/User_login/login.html"; 
         });
     }
 });
@@ -178,7 +165,6 @@ function showPlaceholder(type) {
 }
 
 
-// Fetch all essential expenses
 function fetchEssentialExpenses() {
     fetch("http://localhost:8080/budget/essential-expenses", {
         method: "GET",
@@ -187,29 +173,27 @@ function fetchEssentialExpenses() {
     .then((data) => {
         const expenseList = document.getElementById("bills-list");
         const totalElement = document.getElementById("bills-total");
-        expenseList.innerHTML = ""; // Clear the list
+        expenseList.innerHTML = ""; 
 
         let totalAmount = 0;
 
-        data.forEach((expense, index) => {
-            totalAmount += expense.amount; // Add each expense's amount to the total
+        data.forEach((expense) => {
+            totalAmount += expense.amount;
 
             const expenseItem = document.createElement("li");
             expenseItem.innerHTML = `
                 ${expense.name} - $${expense.amount.toFixed(2)}
-                <button onclick="deleteEssentialExpense(${index})" class="remove-btn">Remove</button>
+                <button onclick="deleteEssentialExpense(${expense.id})" class="remove-btn">Remove</button>
             `;
             expenseList.appendChild(expenseItem);
         });
 
-        // Update the total in the HTML
         totalElement.textContent = totalAmount.toFixed(2);
     })
     .catch((error) => console.error("Error fetching essential expenses:", error));
 }
 
 
-// Add an essential expense
 function addEssentialExpense() {
     const itemName = document.getElementById("bills-item").value.trim();
     const itemAmount = parseFloat(document.getElementById("bills-amount").value);
@@ -231,18 +215,17 @@ function addEssentialExpense() {
     .then(() => {
         fetchEssentialExpenses();
         updateTotalBudget();
-        document.getElementById("bills-placeholder").style.display = 'none'; // Hide placeholder after adding
-        document.getElementById("bills-item").value = ""; // Clear the input field
-        document.getElementById("bills-amount").value = ""; // Clear the input field
+        document.getElementById("bills-placeholder").style.display = 'none'; 
+        document.getElementById("bills-item").value = ""; 
+        document.getElementById("bills-amount").value = ""; 
     })
 
     .catch((error) => console.error("Error adding essential expense:", error));
 }
 
 
-// Delete an essential expense
-function deleteEssentialExpense(index) {
-    fetch(`http://localhost:8080/budget/essential-expenses/${index}`, {
+function deleteEssentialExpense(id) {
+    fetch(`http://localhost:8080/budget/essential-expenses/${id}`, {
         method: "DELETE",
     })
     .then(() => {
@@ -253,7 +236,6 @@ function deleteEssentialExpense(index) {
 }
 
 
-// Fetch all optional spending
 function fetchOptionalSpending() {
     fetch("http://localhost:8080/budget/optional-spending", {
         method: "GET",
@@ -262,7 +244,7 @@ function fetchOptionalSpending() {
     .then((data) => {
         const spendingList = document.getElementById("fun-list");
         const totalElement = document.getElementById("fun-total");
-        spendingList.innerHTML = ""; // Clear the list
+        spendingList.innerHTML = "";
         let totalAmount = 0;
 
         data.forEach((spending, index) => {
@@ -282,7 +264,6 @@ function fetchOptionalSpending() {
 }
 
 
-// Add an optional spending item
 function addOptionalSpending() {
     const itemName = document.getElementById("fun-item").value.trim();
     const itemAmount = parseFloat(document.getElementById("fun-amount").value);
@@ -304,15 +285,14 @@ function addOptionalSpending() {
     .then(() => {
         fetchOptionalSpending();
         updateTotalBudget();
-        document.getElementById("fun-placeholder").style.display = 'none'; // Hide placeholder after adding
-        document.getElementById("fun-item").value = ""; // Clear the input field
-        document.getElementById("fun-amount").value = ""; // Clear the input field
+        document.getElementById("fun-placeholder").style.display = 'none'; 
+        document.getElementById("fun-item").value = ""; 
+        document.getElementById("fun-amount").value = ""; 
     })
     .catch((error) => console.error("Error adding optional spending:", error));
 }
 
 
-// Remove the last optional spending item (stack behavior)
 function removeLastOptionalSpending() {
     fetch("http://localhost:8080/budget/optional-spending", {
         method: "DELETE",
@@ -325,7 +305,6 @@ function removeLastOptionalSpending() {
 }
 
 
-// Update the total budget by getting essential+optional 
 function updateTotalBudget() {
     Promise.all([
         fetch("http://localhost:8080/budget/essential-expenses", { method: "GET" }).then(response => response.json()),
@@ -335,7 +314,6 @@ function updateTotalBudget() {
         let totalEssential = essentialExpenses.reduce((total, expense) => total + expense.amount, 0);
         let totalOptional = optionalSpending.reduce((total, spending) => total + (spending ? spending.amount : 0), 0);
 
-        // Update Total Budget
         const totalBudgetElement = document.getElementById("headerTotalDebts");
         totalBudgetElement.textContent = `$${(totalEssential + totalOptional).toFixed(2)}`;
     })
@@ -343,28 +321,24 @@ function updateTotalBudget() {
 }
 
 
-// user image clicking and dropdown
 document.addEventListener("DOMContentLoaded", () => {
 const userImage = document.getElementById("userImage");
 const dropdownMenu = document.getElementById("dropdownMenu");
 
-// Toggle dropdown visibility on image click
 userImage.addEventListener("click", (event) => {
-    event.stopPropagation(); // Prevent triggering outside click event
+    event.stopPropagation(); 
     dropdownMenu.style.display =
     dropdownMenu.style.display === "block" ? "none" : "block";
 });
 
-// Close dropdown if clicked outside
 document.addEventListener("click", () => {
     dropdownMenu.style.display = "none";
 });
 
-// Logout button functionality
 const logoutButton = document.getElementById("logoutButton");
 logoutButton.addEventListener("click", () => {
     alert("Logged out!");
-    window.location.href = "/User_login/login.html"; // Adjust redirection path if needed
+    window.location.href = "/User_login/login.html"; 
 });
 });
   

@@ -18,7 +18,6 @@ public interface GoalsRepository extends JpaRepository<GoalsEntity, Long> {
     @Query("SELECT g FROM GoalsEntity g WHERE g.user = :user AND MONTH(g.createdAt) = :month AND YEAR(g.createdAt) = :year")
     List<GoalsEntity> findCurrentMonthGoals(@Param("user") UserEntity user, @Param("month") int month, @Param("year") int year);
 
-    // Fetch First Two Goals
     @Query("SELECT g FROM GoalsEntity g WHERE g.user = :user AND MONTH(g.createdAt) = :month AND YEAR(g.createdAt) = :year ORDER BY g.createdAt ASC")
     List<GoalsEntity> findByUserOrderByDateAsc(@Param("user") UserEntity user, @Param("month") int month, @Param("year") int year, PageRequest pageable);
 }

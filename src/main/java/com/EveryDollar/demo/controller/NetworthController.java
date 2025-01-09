@@ -31,24 +31,21 @@ import jakarta.servlet.http.HttpSession;
 class NetworthRender {
     @GetMapping("/")
     public String renderNetworth(HttpSession session, Model model) {
-        // Get logged-in user details from session
         UserEntity loggedInUser = (UserEntity) session.getAttribute("loggedInUser");
 
         if (loggedInUser != null) {
-            // Add user data to the model
             model.addAttribute("username", loggedInUser.getUsername());
 
             LocalDate currentDate = LocalDate.now();
             DayOfWeek currentDay = currentDate.getDayOfWeek();
             DateTimeFormatter formatter = DateTimeFormatter.ofPattern("MMMM dd, yyyy", Locale.ENGLISH);
 
-            // Add day and date to the model
-            model.addAttribute("currentDay", currentDay.name()); // E.g., "WEDNESDAY"
-            model.addAttribute("currentDate", currentDate.format(formatter)); // E.g., "February 22, 2023"
+            model.addAttribute("currentDay", currentDay.name()); 
+            model.addAttribute("currentDate", currentDate.format(formatter)); 
             
-            return "Networth/index"; // Ensure the correct template name
+            return "Networth/index"; 
         } else {
-            return "redirect:/User_login/login.html"; // Redirect to login page if session is invalid
+            return "redirect:/User_login/login.html"; 
         }
     }
 }
@@ -60,7 +57,6 @@ public class NetworthController {
     @Autowired
     private NetworthService netWorthService;
 
-    // Add an asset or debt
     @PostMapping("/add")
     @ResponseBody
     public String addEntry(
@@ -84,7 +80,6 @@ public class NetworthController {
         return type.equals("asset") ? "Asset added successfully!" : "Debt added successfully!";
     }
 
-    // Get all assets for current month
     @GetMapping("/current-month-assets")
     @ResponseBody
     public List<NetworthEntity> getCurrentMonthAssets(HttpSession session) {
@@ -95,7 +90,6 @@ public class NetworthController {
         return netWorthService.getCurrentMonthAssets(loggedInUser);
     }
 
-    // Get all debts for current month
     @GetMapping("/current-month-debts")
     @ResponseBody
     public List<NetworthEntity> getCurrentMonthDebts(HttpSession session) {
