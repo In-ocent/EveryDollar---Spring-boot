@@ -165,6 +165,33 @@ function showPlaceholder(type) {
 }
 
 
+// function fetchEssentialExpenses() {
+//     fetch("http://localhost:8080/budget/essential-expenses", {
+//         method: "GET",
+//     })
+//     .then((response) => response.json())
+//     .then((data) => {
+//         const expenseList = document.getElementById("bills-list");
+//         const totalElement = document.getElementById("bills-total");
+//         expenseList.innerHTML = ""; 
+
+//         let totalAmount = 0;
+
+//         data.forEach((expense) => {
+//             totalAmount += expense.amount;
+
+//             const expenseItem = document.createElement("li");
+//             expenseItem.innerHTML = `
+//                 ${expense.name} - $${expense.amount.toFixed(2)}
+//                 <button onclick="deleteEssentialExpense(${expense.id})" class="remove-btn">Remove</button>
+//             `;
+//             expenseList.appendChild(expenseItem);
+//         });
+
+//         totalElement.textContent = totalAmount.toFixed(2);
+//     })
+//     .catch((error) => console.error("Error fetching essential expenses:", error));
+// }
 function fetchEssentialExpenses() {
     fetch("http://localhost:8080/budget/essential-expenses", {
         method: "GET",
@@ -181,9 +208,13 @@ function fetchEssentialExpenses() {
             totalAmount += expense.amount;
 
             const expenseItem = document.createElement("li");
+            expenseItem.classList.add("expense-item"); // Add the class for styling
             expenseItem.innerHTML = `
-                ${expense.name} - $${expense.amount.toFixed(2)}
-                <button onclick="deleteEssentialExpense(${expense.id})" class="remove-btn">Remove</button>
+                <span>${expense.name} - $${expense.amount.toFixed(2)}</span>
+                <div>
+                    <button onclick="editEssentialExpense(${expense.id}, '${expense.name}', ${expense.amount})" class="edit-btn">Edit</button>
+                    <button onclick="deleteEssentialExpense(${expense.id})" class="remove-btn">Remove</button>
+                </div>
             `;
             expenseList.appendChild(expenseItem);
         });
@@ -191,6 +222,57 @@ function fetchEssentialExpenses() {
         totalElement.textContent = totalAmount.toFixed(2);
     })
     .catch((error) => console.error("Error fetching essential expenses:", error));
+}
+
+function editEssentialExpense(id, currentName, currentAmount) {
+    // Show the placeholder input fields
+    const placeholder = document.getElementById("bills-placeholder");
+    placeholder.style.display = "block";
+
+    // Populate the input fields with current values
+    const nameInput = document.getElementById("bills-item");
+    const amountInput = document.getElementById("bills-amount");
+    nameInput.value = currentName;
+    amountInput.value = currentAmount;
+
+    // Update the add button to act as an edit button
+    const addButton = placeholder.querySelector("button");
+    addButton.textContent = "Update";
+    addButton.onclick = () => updateEssentialExpense(id);
+}
+
+function updateEssentialExpense(id) {
+    const nameInput = document.getElementById("bills-item");
+    const amountInput = document.getElementById("bills-amount");
+
+    const updatedName = nameInput.value.trim();
+    const updatedAmount = parseFloat(amountInput.value);
+
+    if (!updatedName || isNaN(updatedAmount) || updatedAmount <= 0) {
+        alert("Please enter a valid name and amount.");
+        return;
+    }
+
+    const updatedExpense = { name: updatedName, amount: updatedAmount };
+
+    fetch(`http://localhost:8080/budget/essential-expenses/${id}`, {
+        method: "PUT",
+        headers: {
+            "Content-Type": "application/json",
+        },
+        body: JSON.stringify(updatedExpense),
+    })
+    .then(() => {
+        fetchEssentialExpenses();
+        updateTotalBudget();
+
+        // Reset the input fields and button
+        document.getElementById("bills-item").value = "";
+        document.getElementById("bills-amount").value = "";
+        const placeholder = document.getElementById("bills-placeholder");
+        placeholder.style.display = "none";
+    })
+    .catch((error) => console.error("Error updating essential expense:", error));
 }
 
 

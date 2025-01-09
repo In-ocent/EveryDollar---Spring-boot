@@ -133,6 +133,18 @@ public class BudgetController {
         return budgetService.deleteEssentialExpense(id, loggedInUser);
     }
 
+    @PutMapping("/essential-expenses/{id}")
+    @ResponseBody
+    public String updateEssentialExpense(@PathVariable Long id, @RequestBody EssentialExpensesEntity updatedExpense, HttpSession session) {
+        UserEntity loggedInUser = (UserEntity) session.getAttribute("loggedInUser");
+
+        if (loggedInUser == null) {
+            throw new RuntimeException("User not logged in");
+        }
+
+        return budgetService.updateEssentialExpense(id, updatedExpense, loggedInUser);
+    }
+
 
 
     private Expense[] optionalSpending = new Expense[20]; 

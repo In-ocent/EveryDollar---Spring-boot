@@ -91,4 +91,18 @@ public class BudgetService {
         }
         return "Expense not found or does not belong to the user.";
     }
+
+    public String updateEssentialExpense(Long id, EssentialExpensesEntity updatedExpense, UserEntity user) {
+        EssentialExpensesEntity existingExpense = essentialExpensesRepository.findById(id).orElse(null);
+    
+        if (existingExpense == null || !existingExpense.getUser().getId().equals(user.getId())) {
+            return "Expense not found or does not belong to the user.";
+        }
+    
+        existingExpense.setName(updatedExpense.getName());
+        existingExpense.setAmount(updatedExpense.getAmount());
+    
+        essentialExpensesRepository.save(existingExpense);
+        return "Expense updated successfully!";
+    }
 }
